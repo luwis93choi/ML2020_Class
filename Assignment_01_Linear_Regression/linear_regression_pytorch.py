@@ -4,6 +4,7 @@
 # Reference 04 (Pytorch Linear Regression) : https://greeksharifa.github.io/pytorch/2018/11/02/pytorch-usage-02-Linear-Regression-Model/
 # Reference 05 (Google Machine Learning Crash Course - Linear Regression) : https://developers.google.com/machine-learning/crash-course/descending-into-ml/video-lecture
 # Reference 06 : 인공지능을 위한 수학 (이시카와 아키히코) - 5장 선형회귀
+# Reference 07 (Linear Regression From Scratch without any Library) : https://www.kaggle.com/siddhrath/linear-regression-from-scratch-without-any-library
 
 import pandas as pd
 
@@ -14,63 +15,157 @@ import matplotlib.pyplot as plt
 
 print("--- ML2020 Assignment 01 : Linear Regression ---")
 
+# Load Dataset
 data = pd.read_csv('./train_data.csv')
-x = torch.from_numpy(data['x'].values).unsqueeze(dim=1).float()
-y = torch.from_numpy(data['y'].values).unsqueeze(dim=1).float()
+# Hyper Parameters
+learning_rate = 0.01
+train_step = 3000
 
-model = nn.Linear(in_features=1, out_features=1, bias=True)
-print('[model] : ' + str(model))
+def linear_regression_Pytorch(data, _lr, train_step):
 
-print('[model.weight]')
-print(model.weight)
+    x = torch.from_numpy(data['x'].values).unsqueeze(dim=1).float()
+    y = torch.from_numpy(data['y'].values).unsqueeze(dim=1).float()
 
-print('[model.bias]')
-print(model.bias)
+    model = nn.Linear(in_features=1, out_features=1, bias=True)
 
-criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(params=model.parameters(), lr=0.01)
+    criterion = nn.MSELoss()
+    optimizer = torch.optim.Adam(params=model.parameters(), lr=_lr)
 
-loss_list = []
-for step in range(3000):
+    loss_list = []
+    for step in range(train_step):
 
-    prediction = model(x)
-    loss = criterion(input=prediction, target=y)
+        prediction = model(x)
+        loss = criterion(input=prediction, target=y)
 
-    loss_list.append(loss.data.item())
+        loss_list.append(loss.data.item())
 
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
 
-    if step % 20 == 0:
+        if step == train_step-1:
 
-        print('MSE Loss : ' + str(loss.data.item()))
+            plt.suptitle('Linear Regression using PyTorch')
 
-        plt.subplot(1, 2, 1)
-        plt.title('loss={:.4}, w={:.4}, b={:.4}'.format(loss.data.item(), model.weight.item(), model.bias.item()))
-        plt.xlim(0, 11)
-        plt.ylim(0, 8)
-        plt.scatter(x.data.numpy(), y.data.numpy())
-        plt.plot(x.data.numpy(), prediction.data.numpy(), 'b--')
-        plt.draw()
+            plt.subplot(1, 2, 1)
+            plt.title('loss={:.4}, w={:.4}, b={:.4}'.format(loss.data.item(), model.weight.item(), model.bias.item()))
+            plt.xlim(0, 11)
+            plt.ylim(0, 8)
+            plt.scatter(x.data.numpy(), y.data.numpy())
+            plt.plot(x.data.numpy(), prediction.data.numpy(), 'b--')
 
-        plt.subplot(1, 2, 2)
-        plt.title('MSE Loss Function')
-        plt.plot(range(len(loss_list)), loss_list, 'b')
-        plt.pause(0.01)
+            plt.subplot(1, 2, 2)
+            plt.title('MSE Loss Function')
+            plt.plot(range(len(loss_list)), loss_list, 'b')
+            plt.savefig('./linear_regression_result_with_PyTorch.png')
+            plt.show()
 
-        plt.subplot(1, 2, 1)
-        plt.clf()
+        elif step % 20 == 0:
 
-plt.subplot(1, 2, 1)
-plt.title('loss={:.4}, w={:.4}, b={:.4}'.format(loss.data.item(), model.weight.item(), model.bias.item()))
-plt.xlim(0, 11)
-plt.ylim(0, 8)
-plt.scatter(x.data.cpu().numpy(), y.data.cpu().numpy())
-plt.plot(x.data.cpu().numpy(), prediction.data.cpu().numpy(), 'b--')
+            print('MSE Loss : ' + str(loss.data.item()))
+            
+            plt.suptitle('Linear Regression using Pytorch')
 
-plt.subplot(1, 2, 2)
-plt.title('MSE Loss Function')
-plt.plot(range(len(loss_list)), loss_list, 'b')
-plt.savefig('./linear_regression_result.png')
-plt.show()
+            plt.subplot(1, 2, 1)
+            plt.title('loss={:.4}, w={:.4}, b={:.4}'.format(loss.data.item(), model.weight.item(), model.bias.item()))
+            plt.xlim(0, 11)
+            plt.ylim(0, 8)
+            plt.scatter(x.data.numpy(), y.data.numpy())
+            plt.plot(x.data.numpy(), prediction.data.numpy(), 'b--')
+            plt.draw()
+
+            plt.subplot(1, 2, 2)
+            plt.title('MSE Loss Function')
+            plt.plot(range(len(loss_list)), loss_list, 'b')
+            plt.pause(0.01)
+
+            plt.subplot(1, 2, 1)
+            plt.clf()
+
+def predict(_x, _w, _b):
+
+    return _w * _x + _b
+
+def L2_loss_function(_x, _y, _w, _b):
+
+    data_num = len(_x)
+    total_error = 0.0
+
+    for i in range(data_num):
+
+        total_error += (_y[i] - (_w * _x[i] + _b))**2
+
+    return total_error / data_num
+
+def update_gradient_descent(_x, _y, _w, _b, learning_rate):
+
+    weight_derivative = 0
+    bias_derivative = 0
+    data_num = len(_x)
+
+    for i in range(data_num):
+        weight_derivative += -2 * _x[i] * (_y[i] - (_x[i] * _w + _b))
+        bias_derivative += -2 * (_y[i] - (_x[i] * _w + _b))
+
+    _w -= (weight_derivative / data_num) * learning_rate
+    _b -= (bias_derivative / data_num) * learning_rate
+
+    return _w, _b
+
+def linear_regression_NoPytorch(data, init_w, init_b, learning_rate, train_step):
+
+    x = data['x'].values
+    y = data['y'].values
+
+    loss_list = []
+    for step in range(train_step):
+
+        init_w, init_b = update_gradient_descent(x, y, init_w, init_b, learning_rate)
+
+        loss = L2_loss_function(x, y, init_w, init_b)
+        loss_list.append(loss)
+
+        if step == train_step-1:
+
+            plt.suptitle('Linear Regression without PyTorch')
+
+            plt.subplot(1, 2, 1)
+            plt.title('loss={:.4}, w={:.4}, b={:.4}'.format(loss, init_w, init_b))
+            plt.xlim(0, 11)
+            plt.ylim(0, 8)
+            plt.scatter(x, y)
+            plt.plot(x, predict(x, init_w, init_b), 'b--')
+
+            plt.subplot(1, 2, 2)
+            plt.title('MSE Loss Function')
+            plt.plot(range(len(loss_list)), loss_list, 'b')
+            plt.savefig('./linear_regression_result_without_PyTorch.png')
+            plt.show()
+
+        elif step % 20 == 0:
+
+            print('MSE Loss : ' + str(loss))
+            
+            plt.suptitle('Linear Regression without Pytorch')
+
+            plt.subplot(1, 2, 1)
+            plt.title('loss={:.4}, w={:.4}, b={:.4}'.format(loss, init_w, init_b))
+            plt.xlim(0, 11)
+            plt.ylim(0, 8)
+            plt.scatter(x, y)
+            plt.plot(x, predict(x, init_w, init_b), 'b--')
+            plt.draw()
+
+            plt.subplot(1, 2, 2)
+            plt.title('MSE Loss Function')
+            plt.plot(range(len(loss_list)), loss_list, 'b')
+            plt.pause(0.01)
+
+            plt.subplot(1, 2, 1)
+            plt.clf()
+
+    return init_w, init_b
+
+linear_regression_Pytorch(data, learning_rate, train_step)
+
+linear_regression_NoPytorch(data, 0, 0, learning_rate, train_step)
