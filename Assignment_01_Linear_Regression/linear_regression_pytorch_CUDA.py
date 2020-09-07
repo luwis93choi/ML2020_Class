@@ -3,7 +3,7 @@
 # Reference 03 (Anaconda Pytorch Setup) : https://pytorch.org/get-started/locally/
 # Reference 04 (Pytorch Linear Regression) : https://greeksharifa.github.io/pytorch/2018/11/02/pytorch-usage-02-Linear-Regression-Model/
 # Reference 05 (Google Machine Learning Crash Course - Linear Regression) : https://developers.google.com/machine-learning/crash-course/descending-into-ml/video-lecture
-# Reference 06 : 인공지능을 위한 수학 (이시카와 아키히코)
+# Reference 06 : 인공지능을 위한 수학 (이시카와 아키히코) - 5장 선형회귀
 
 import pandas as pd
 
