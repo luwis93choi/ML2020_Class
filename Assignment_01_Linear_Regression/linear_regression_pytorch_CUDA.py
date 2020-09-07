@@ -37,6 +37,9 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(params=model.parameters(), lr=0.01)
 
 loss_list = []
+
+fig, axes = plt.subplots(1, 2)
+
 for step in range(3000):
 
     x = Variable(x.to(PROCESSOR))
@@ -55,31 +58,19 @@ for step in range(3000):
 
         print('MSE Loss : ' + str(loss.data.item()))
 
-        plt.subplot(1, 2, 1)
-        plt.title('loss={:.4}, w={:.4}, b={:.4}'.format(loss.data.item(), model.weight.item(), model.bias.item()))
-        plt.xlim(0, 11)
-        plt.ylim(0, 8)
-        plt.scatter(x.data.cpu().numpy(), y.data.cpu().numpy())
-        plt.plot(x.data.cpu().numpy(), prediction.data.cpu().numpy(), 'b--')
+        plt.suptitle('Linear Regression using PyTorch and GPU/CUDA')
+
+        axes[0].set_title('loss={:.4}, w={:.4}, b={:.4}'.format(loss.data.item(), model.weight.item(), model.bias.item()))
+        axes[0].set_xlim(0, 11)
+        axes[0].set_ylim(0, 8)
+        axes[0].scatter(x.data.cpu().numpy(), y.data.cpu().numpy())
+        axes[0].plot(x.data.cpu().numpy(), prediction.data.cpu().numpy(), 'b--')
+        
+        axes[1].set_title('MSE Loss Function')
+        axes[1].plot(range(len(loss_list)), loss_list, 'b')
+        
         plt.draw()
-
-        plt.subplot(1, 2, 2)
-        plt.title('MSE Loss Function')
-        plt.plot(range(len(loss_list)), loss_list, 'b')
         plt.pause(0.01)
+        axes[0].clear()
 
-        plt.subplot(1, 2, 1)
-        plt.clf()
-
-plt.subplot(1, 2, 1)
-plt.title('loss={:.4}, w={:.4}, b={:.4}'.format(loss.data.item(), model.weight.item(), model.bias.item()))
-plt.xlim(0, 11)
-plt.ylim(0, 8)
-plt.scatter(x.data.cpu().numpy(), y.data.cpu().numpy())
-plt.plot(x.data.cpu().numpy(), prediction.data.cpu().numpy(), 'b--')
-
-plt.subplot(1, 2, 2)
-plt.title('MSE Loss Function')
-plt.plot(range(len(loss_list)), loss_list, 'b')
-plt.savefig('./linear_regression_result.png')
-plt.show()
+plt.savefig('./linear_regression_result_with_PyTorch_GPU_CUDA.png')
