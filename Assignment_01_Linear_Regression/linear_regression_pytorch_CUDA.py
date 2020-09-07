@@ -33,14 +33,18 @@ print(model.weight)
 print('[model.bias]')
 print(model.bias)
 
+# Hyper Parameters
+learning_rate = 0.01
+train_step = 3000
+
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(params=model.parameters(), lr=0.01)
+optimizer = torch.optim.Adam(params=model.parameters(), lr=learning_rate)
 
 loss_list = []
 
 fig, axes = plt.subplots(1, 2)
 
-for step in range(3000):
+for step in range(train_step):
 
     x = Variable(x.to(PROCESSOR))
     y = Variable(y.to(PROCESSOR))
@@ -54,7 +58,23 @@ for step in range(3000):
     loss.backward()
     optimizer.step()
 
-    if step % 20 == 0:
+    if step == train_step-1:
+
+            plt.suptitle('Linear Regression using PyTorch')
+
+            axes[0].set_title('loss={:.4}, w={:.4}, b={:.4}'.format(loss.data.item(), model.weight.item(), model.bias.item()))
+            axes[0].set_xlim(0, 11)
+            axes[0].set_ylim(0, 8)
+            axes[0].scatter(x.data.cpu().numpy(), y.data.cpu().numpy())
+            axes[0].plot(x.data.cpu().numpy(), prediction.data.cpu().numpy(), 'b--')
+
+            axes[1].set_title('MSE Loss Function')
+            axes[1].plot(range(len(loss_list)), loss_list, 'b')
+
+            plt.savefig('./linear_regression_result_with_PyTorch_GPU_CUDA.png')
+            plt.draw()
+
+    elif step % 20 == 0:
 
         print('MSE Loss : ' + str(loss.data.item()))
 
@@ -72,5 +92,3 @@ for step in range(3000):
         plt.draw()
         plt.pause(0.01)
         axes[0].clear()
-
-plt.savefig('./linear_regression_result_with_PyTorch_GPU_CUDA.png')

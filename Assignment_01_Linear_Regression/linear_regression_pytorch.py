@@ -17,6 +17,7 @@ print("--- ML2020 Assignment 01 : Linear Regression ---")
 
 # Load Dataset
 data = pd.read_csv('./train_data.csv')
+
 # Hyper Parameters
 learning_rate = 0.01
 train_step = 3000
