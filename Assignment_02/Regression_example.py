@@ -47,6 +47,11 @@ from sklearn.linear_model import LinearRegression
 X, y = mglearn.datasets.make_wave(n_samples=60)
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
+print('Correlation (Linearity) : ', np.corrcoef(np.array(X.T)[0], y)[1][0])
+
+print('X shape : ', X.shape)
+print('Y shape : ', y.shape)
+
 print('X_train : ', X_train)
 print('y_train : ', y_train)
 
@@ -94,9 +99,6 @@ lr = LinearRegression().fit(X_train, y_train)
 
 print('X shape : ', X.shape)
 print('Y shape : ', y.shape)
-
-print('lr.coef_ : ', lr.coef_)
-print('lr.intercept_ : ', lr.intercept_)
 
 print('Train set score : {:.2f}'.format(lr.score(X_train, y_train)))
 print('Test set score : {:.2f}'.format(lr.score(X_test, y_test)))
