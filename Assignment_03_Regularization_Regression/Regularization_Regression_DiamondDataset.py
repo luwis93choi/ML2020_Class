@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import random
 
 import seaborn as sns
 
@@ -13,7 +12,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from sklearn import linear_model
-from sklearn.linear_model import Ridge, Lasso, ElasticNetCV, ElasticNet
+from sklearn.linear_model import Ridge, Lasso, ElasticNetCV
 from sklearn.metrics import mean_squared_error
 
 from sklearn.preprocessing import LabelEncoder
@@ -179,7 +178,7 @@ plt.show()
 
 ### Coefficient changes (Feature weight value changes) for parameter changes
 alphaRidge = parameters['alpha']
-alphaLasso = np.arange(0, 20, 1)
+alphaLasso = parameters['alpha']
 alphaElasticNet = parameters['alpha']
 
 coefficient_Ridge = []
