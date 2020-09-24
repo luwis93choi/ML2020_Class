@@ -13,7 +13,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from sklearn import linear_model
-from sklearn.linear_model import Ridge, Lasso
+from sklearn.linear_model import Ridge, Lasso, ElasticNetCV, ElasticNet
 from sklearn.metrics import mean_squared_error
 
 from sklearn.preprocessing import LabelEncoder
@@ -76,13 +76,102 @@ plt.title('Correlation Matrix Heatmap of Diamond Dataset', pad=15, fontsize='x-l
 sns.heatmap(data=correlation_matrix, square=True, annot=True, cbar=True)
 plt.show()
 
+### Dataset Preparation Phase ###
 # Prepare the dataset and split it into train set and test set
 X_train, X_test, y_train, y_test = train_test_split(features_X, target_y, test_size=0.25, random_state=101)
-parameters = {'alpha': np.concatenate((np.arange(0.1,2,0.1), np.arange(2, 5, 0.5), np.arange(5, 26, 1)))}
+parameters = {'alpha': np.concatenate((np.arange(0.1,2,0.1), np.arange(2, 5, 0.5), np.arange(5, 100, 1)))}
 
+### Regression Phase ###
+
+# [Linear Regression]
+# Apply Linear Regression Model for reference data
+linear = linear_model.LinearRegression()
+
+linear.fit(X_train, y_train)
+
+y_predict = linear.predict(X_test)
+
+print('----------------------------------')
+print('Linear Score : ', linear.score(X_test, y_test))
+print('Linear MSE : ', mean_squared_error(y_test, y_predict))
+
+plt.subplot(2, 2, 1)
+plt.title('Diamond Price Prediction using Linear Regression \n (R^2 Score : {:2f} / MSE : {:2f})'.format(linear.score(X_test, y_test), mean_squared_error(y_test, y_predict)))
+plt.grid()
+plt.plot(range(30000), range(30000), color='red', linestyle='dashed')
+plt.xlim(0, 30000)
+plt.ylim(0, 30000)
+plt.scatter(y_test, y_predict)
+
+# [Ridge = RSS + L2 Penalty]
+# Since the correlation matrix shows multi-colinearity between features, 
+# Ridge is used as regularization method to suppress the multi-colinearity between features.
+ridge = linear_model.Ridge()
+
+gridridge = GridSearchCV(ridge, parameters, scoring='r2')
+
+gridridge.fit(X_train, y_train)
+
+y_predict = gridridge.predict(X_test)
+
+print('----------------------------------')
+print('Ridge Best Parameters : ', gridridge.best_params_)
+print('Ridge Score : ', gridridge.score(X_test, y_test))
+print('Ridge MSE : ', mean_squared_error(y_test, y_predict))
+
+plt.subplot(2, 2, 2)
+plt.title('Diamond Price Prediction using Ridge \n (R^2 Score : {:2f} / MSE : {:2f})'.format(gridridge.score(X_test, y_test), mean_squared_error(y_test, y_predict)))
+plt.grid()
+plt.plot(range(30000), range(30000), color='red', linestyle='dashed')
+plt.xlim(0, 30000)
+plt.ylim(0, 30000)
+plt.scatter(y_test, y_predict, color='orange')
+
+# [Lasso = RSS + L1 Penalty]
+# Lasso is used to further suppress the multi-colinearity among features
+# By zeroing unvialbe features, Lasso can be used for feature selection.
 lasso = linear_model.Lasso()
+
 gridlasso = GridSearchCV(lasso, parameters, scoring='r2')
+
 gridlasso.fit(X_train, y_train)
+
+y_predict = gridlasso.predict(X_test)
+
+print('----------------------------------')
 print('Lasso Best Parameters : ', gridlasso.best_params_)
 print('Lasso Score : ', gridlasso.score(X_test, y_test))
-print('Lasso MSE : ', mean_squared_error(y_test, gridlasso.predict(X_test)))
+print('Lasso MSE : ', mean_squared_error(y_test, y_predict))
+
+plt.subplot(2, 2, 3)
+plt.title('Diamond Price Prediction using Lasso \n (R^2 Score : {:2f} / MSE : {:2f})'.format(gridlasso.score(X_test, y_test), mean_squared_error(y_test, y_predict)))
+plt.grid()
+plt.plot(range(30000), range(30000), color='red', linestyle='dashed')
+plt.xlim(0, 30000)
+plt.ylim(0, 30000)
+plt.scatter(y_test, y_predict, color='black')
+
+# [ElasticNet = Ridge + Lasso]
+# ElasticNet is the combinatio of Ridge and Lasso.
+# ElasticNet can balance between Ridge and Lasso. This can produce more generalized regression model for the dataset.
+elasticNet = linear_model.ElasticNetCV(cv=5, random_state=12, l1_ratio=np.arange(0, 1, 0.01), alphas=np.arange(0.1, 100, 0.1))
+
+elasticNet.fit(X_train, y_train)
+
+y_predict = elasticNet.predict(X_test)
+
+print('----------------------------------')
+print('ElasticNet')
+print('L1 penalty ratio : ', elasticNet.l1_ratio_)
+print('ElasticNet Score : ', elasticNet.score(X_test, y_test))
+print('ElasticNet MSE : ', mean_squared_error(y_test, y_predict))
+
+plt.subplot(2, 2, 4)
+plt.title('Diamond Price Prediction using ElasticNet \n (L1 Penalty : {:2f} / L2 Penalty : {:2f}) \n (R^2 Score : {:2f} / MSE : {:2f})'.format(elasticNet.l1_ratio_, 1 - elasticNet.l1_ratio_, elasticNet.score(X_test, y_test), mean_squared_error(y_test, y_predict)))
+plt.grid()
+plt.plot(range(30000), range(30000), color='red', linestyle='dashed')
+plt.xlim(0, 30000)
+plt.ylim(0, 30000)
+plt.scatter(y_test, y_predict, color='green')
+plt.show()
+
