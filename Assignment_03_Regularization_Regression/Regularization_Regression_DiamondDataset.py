@@ -160,9 +160,11 @@ elasticNet.fit(X_train, y_train)
 
 y_predict = elasticNet.predict(X_test)
 
+L1_ratio = elasticNet.l1_ratio_
+
 print('----------------------------------')
 print('ElasticNet')
-print('L1 penalty ratio : ', elasticNet.l1_ratio_)
+print('L1 penalty ratio : ', L1_ratio)
 print('ElasticNet Score : ', elasticNet.score(X_test, y_test))
 print('ElasticNet MSE : ', mean_squared_error(y_test, y_predict))
 
@@ -175,3 +177,49 @@ plt.ylim(0, 30000)
 plt.scatter(y_test, y_predict, color='green')
 plt.show()
 
+### Coefficient changes (Feature weight value changes) for parameter changes
+alphaRidge = parameters['alpha']
+alphaLasso = np.arange(0, 20, 1)
+alphaElasticNet = parameters['alpha']
+
+coefficient_Ridge = []
+coefficient_Lasso = []
+coefficient_ElasticNet = []
+
+# Prepare coefficient changes of Ridge
+for alpha in alphaRidge:
+    ridge = linear_model.Ridge(alpha=alpha)
+    ridge.fit(X_train, y_train)
+    coefficient_Ridge.append(ridge.coef_[0])
+
+# Prepare coefficient changes of Lasso
+for alpha in alphaLasso:
+    lasso = linear_model.Lasso(alpha=alpha)
+    lasso.fit(X_train, y_train)
+    coefficient_Lasso.append(lasso.coef_)
+
+# Prepare coefficient changes of ElasticNet
+for alpha in alphaElasticNet:
+    elasticNet = linear_model.ElasticNetCV(cv=5, random_state=12, l1_ratio=L1_ratio, alphas=[alpha])
+    elasticNet.fit(X_train, y_train)
+    coefficient_ElasticNet.append(elasticNet.coef_)
+
+plt.cla
+plt.subplot(1, 3, 1)
+plt.plot(alphaRidge, coefficient_Ridge)
+plt.title('Ridge Coefficients')
+plt.xlabel('alpha')
+plt.ylabel('coefficients')
+
+plt.subplot(1, 3, 2)
+plt.plot(alphaLasso, coefficient_Lasso)
+plt.title('Lasso Coefficients')
+plt.xlabel('alpha')
+plt.ylabel('coefficients')
+
+plt.subplot(1, 3, 3)
+plt.plot(alphaElasticNet, coefficient_ElasticNet)
+plt.title('ElasticNet Coefficients \n (L1 Penalty : {:2f} / L2 Penalty : {:2f})'.format(L1_ratio, 1-L1_ratio))
+plt.xlabel('alpha')
+plt.ylabel('coefficients')
+plt.show()
