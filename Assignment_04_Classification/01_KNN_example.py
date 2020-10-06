@@ -43,7 +43,7 @@ def get_neighbors(train, test_row, num_neighbors):
 		dist = euclidean_distance(test_row, train_row)
 		distances.append((train_row, dist))
 
-	# Sort the training data in descending order of the distance to test data
+	# Sort the training data in ascending order of the distance to test data
 	# Training data with shortest distance will be positioned in lower index
 	distances.sort(key=lambda tup:tup[1])
 
