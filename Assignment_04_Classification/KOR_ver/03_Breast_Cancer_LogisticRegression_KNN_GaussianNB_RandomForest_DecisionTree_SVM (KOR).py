@@ -1,7 +1,7 @@
-#####################################################################
-### Breaset Cancer Classification using Logistic Regression, KNN, ###
-### Gaussian Naive Bayes, Random Forest, Decision Tree, and SVM   ###
-#####################################################################
+########################################################################
+### Q3. Breast Cancer Classification using Logistic Regression, KNN, ###
+###     Gaussian Naive Bayes, Random Forest, Decision Tree, and SVM  ###
+########################################################################
 import pandas as pd
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split

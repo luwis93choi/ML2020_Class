@@ -38,7 +38,7 @@ dataset_labels = titanic_dataset['Survived']
 print('[Pre-Processed Titanic Dataset]')
 print(dataset_features)
 
-print('[Pre-Processing] : Split the dataset into 70% training dataset and 30% validation dataset')
+print('[Pre-Processing] : Split the dataset into 70% training dataset and 30% test dataset')
 train_features, test_features, train_labels, test_labels = train_test_split(dataset_features, dataset_labels, test_size=0.3, random_state=32)
 
 k_list = range(1, 101)

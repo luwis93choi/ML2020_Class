@@ -109,14 +109,10 @@ print(df_data.describe())	# 유방암 데이터셋의 Feature 데이터에 대�
 ### 데이터셋 정규화 ###
 # Min-Max 정규화 함수
 def min_max_normalize(lst):
-
 	normalized = []
-
 	for value in lst:
-		# 리스트에 있는 값을 Min-Max 정규화를 수행하여 모든 값을 0 ~ 1 사이의 값으로 정리함
-		normalized_num = (value - min(lst)) / (max(lst) - min(lst))
+		normalized_num = (value - min(lst)) / (max(lst) - min(lst))	# 리스트에 있는 값을 Min-Max 정규화를 수행하여 모든 값을 0 ~ 1 사이의 값으로 정리함
 		normalized.append(normalized_num)
-
 	return normalized
 
 # 각 Column Feature 데이터에 대해 Min-Max 정규화를 수행함
@@ -147,13 +143,14 @@ print(len(validation_labels))		# Validation Label 데이터 개수 출력
 from sklearn.neighbors import KNeighborsClassifier
 classifier = KNeighborsClassifier(n_neighbors=3)	# Neighbor 3개를 선정하는 KNN Classifier 생성
 
-classifier.fit(training_data, training_labels)		# *** KNN Classifier가 Learning이나 Training이 필요하지 않는 Lazy Classifier임에도 Fit을 하는 이유 = '탐색 효율 증가' *** 
-							#     : NxM 벡터로 구성된 데이터셋 내에서 전체 탐색이 아닌 효과적인 방식으로 K개의 Neighbor를 찾기 위해서는
-							#       데이터셋의 데이터를 탐색에 용의한 자료구조로 재정리할 필요가 있음
-							#       Fit을 통해서 현재 데이터셋에 대해 어떤 자료구조를 사용해서 정리할 것인지 결정하고
-							#       결정된 자료구조로 데이터를 배치해서 K개의 Neighbor를 보다 효율적으로 찾아냄
-							#       scikit-learn의 KNeighborsClassifier는 Ball Tree, KD Tree, Brute Force 등 여러 자료구조를 사용하여 Neighbor 탐색 수행
-							#       (출처 : https://stats.stackexchange.com/questions/349842/why-do-we-need-to-fit-a-k-nearest-neighbors-classifier)
+classifier.fit(training_data, training_labels)	
+# *** KNN Classifier가 Learning이나 Training이 필요하지 않는 Lazy Classifier임에도 Fit을 하는 이유 = '탐색 효율 증가' *** 
+#     : NxM 벡터로 구성된 데이터셋 내에서 전체 탐색이 아닌 효과적인 방식으로 K개의 Neighbor를 찾기 위해서는
+#       데이터셋의 데이터를 탐색에 용의한 자료구조로 재정리할 필요가 있음
+#       Fit을 통해서 현재 데이터셋에 대해 어떤 자료구조를 사용해서 정리할 것인지 결정하고
+#       결정된 자료구조로 데이터를 배치해서 K개의 Neighbor를 보다 효율적으로 찾아냄
+#       scikit-learn의 KNeighborsClassifier는 Ball Tree, KD Tree, Brute Force 등 여러 자료구조를 사용하여 Neighbor 탐색 수행
+#       (출처 : https://stats.stackexchange.com/questions/349842/why-do-we-need-to-fit-a-k-nearest-neighbors-classifier)
 
 print(classifier.score(validation_data, validation_labels))	# KNN Classifier에 대한 성능을 검증하기 위해 Test Data에 대한 Label 추정 정확도 확인
 
