@@ -129,5 +129,5 @@ plt.text(barlist[5].get_x(), accuracy[5] + 0.005, s=str(accuracy[5]), fontweight
 
 plt.xlabel('Classification Method')
 plt.ylabel('Accuracy')
-plt.title('Classifcation Results on Breast Cancer Dataset\n(Standardized Dataset)', fontsize='15', fontweight='bold')
+plt.title('Classification Results on Breast Cancer Dataset\n(Standardized Dataset)', fontsize='15', fontweight='bold')
 plt.show()
