@@ -13,6 +13,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import svm
 from sklearn import metrics
+from matplotlib import pyplot as plt
 
 breaset_cancer_dataset = load_breast_cancer()
 
@@ -32,7 +33,7 @@ print(breaset_cancer_data.describe())
 train_data, test_data, train_label, test_label = train_test_split(breaset_cancer_data, breaset_cancer_label, test_size=0.3, random_state=23)
 
 # Dataset Standardization 
-scaler = StandardScaler()
+scaler = StandardScaler()   # Standardize the dataset using mean and variance, and convert it into z-score values
 train_data = scaler.fit_transform(train_data)
 test_data = scaler.transform(test_data)
 
@@ -100,3 +101,31 @@ print('Prediction Accuracy of Gaussian NB : ', GaussianNB_acc)
 print('Prediction Accuracy of Random Forest : ', RandomForest_acc)
 print('Prediction Accuracy of Decision Tree : ', DeicisionTree_acc)
 print('Prediction Accuracy of SVM : ', SVM_acc)
+
+models = ['Logistic\nRegression', 'KNN', 'GaussianNB', 'Random\nForest', 'Decision\nTree', 'SVM']
+accuracy = [LogR_acc, maxKNN_acc, GaussianNB_acc, RandomForest_acc, DeicisionTree_acc, SVM_acc]
+
+barlist = plt.bar(models, accuracy)
+
+barlist[0].set_color('red')
+plt.text(barlist[0].get_x(), accuracy[0] + 0.005, s=str(accuracy[0]), fontweight='bold')
+
+barlist[1].set_color('orange')
+plt.text(barlist[1].get_x(), accuracy[1] + 0.005, s=str(accuracy[1]), fontweight='bold')
+
+barlist[2].set_color('blue')
+plt.text(barlist[2].get_x(), accuracy[2] + 0.005, s=str(accuracy[2]), fontweight='bold')
+
+barlist[3].set_color('green')
+plt.text(barlist[3].get_x(), accuracy[3] + 0.005, s=str(accuracy[3]), fontweight='bold')
+
+barlist[4].set_color('purple')
+plt.text(barlist[4].get_x(), accuracy[4] + 0.005, s=str(accuracy[4]), fontweight='bold')
+
+barlist[5].set_color('yellow')
+plt.text(barlist[5].get_x(), accuracy[5] + 0.005, s=str(accuracy[5]), fontweight='bold')
+
+plt.xlabel('Classification Method')
+plt.ylabel('Accuracy')
+plt.title('Classifcation Results on Breast Cancer Dataset', fontsize='15', fontweight='bold')
+plt.show()
