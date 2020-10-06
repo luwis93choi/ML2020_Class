@@ -52,7 +52,7 @@ gs = main_fig.add_gridspec(2, 6)
 fg_ax1 = main_fig.add_subplot(gs[0, 0:2])
 fg_ax1.boxplot(breast_cancer_dataset.data)
 plt.xticks(np.arange(len(breast_cancer_dataset.feature_names))+1, breast_cancer_dataset.feature_names, rotation=90)
-fg_ax1.set_title('Breast Cancer Dataset\n(No Standardization or Normalization)', fontdict={'weight':'bold'})
+fg_ax1.set_title('Original Breast Cancer Dataset\n(No Standardization or Normalization)', fontdict={'weight':'bold'})
 
 fg_ax2 = main_fig.add_subplot(gs[0, 2:4])
 fg_ax2.boxplot(standardized_breast_cancer_data)
