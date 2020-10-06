@@ -15,22 +15,22 @@ from sklearn import svm
 from sklearn import metrics
 from matplotlib import pyplot as plt
 
-breaset_cancer_dataset = load_breast_cancer()
+breast_cancer_dataset = load_breast_cancer()
 
-print('Breast Cancer Dataset Key : ', breaset_cancer_dataset.keys())
+print('Breast Cancer Dataset Key : ', breast_cancer_dataset.keys())
 
-print('Breast Cancer Dataset Target : ', breaset_cancer_dataset.target_names)
+print('Breast Cancer Dataset Target : ', breast_cancer_dataset.target_names)
 
-breaset_cancer_data = pd.DataFrame(breaset_cancer_dataset.data)
-breaset_cancer_label = pd.DataFrame(breaset_cancer_dataset.target)
+breast_cancer_data = pd.DataFrame(breast_cancer_dataset.data)
+breast_cancer_label = pd.DataFrame(breast_cancer_dataset.target)
 
-print(breaset_cancer_data.head())
+print(breast_cancer_data.head())
 
-print(breaset_cancer_label.head())
+print(breast_cancer_label.head())
 
-print(breaset_cancer_data.describe())
+print(breast_cancer_data.describe())
 
-train_data, test_data, train_label, test_label = train_test_split(breaset_cancer_data, breaset_cancer_label, test_size=0.3, random_state=23)
+train_data, test_data, train_label, test_label = train_test_split(breast_cancer_data, breast_cancer_label, test_size=0.3, random_state=23)
 
 # Dataset Standardization 
 scaler = StandardScaler()   # Standardize the dataset using mean and variance, and convert it into z-score values
@@ -83,7 +83,7 @@ DecisionTree.fit(train_data, train_label)
 
 prediction = DecisionTree.predict(test_data)
 
-DeicisionTree_acc = metrics.accuracy_score(prediction, test_label)
+DecisionTree_acc = metrics.accuracy_score(prediction, test_label)
 
 ### Support Vector Machine ###
 SVM = svm.SVC(kernel='rbf', C=1, gamma=0.1)
@@ -99,11 +99,11 @@ print('Prediction Accuracy of Logistic Accuracy : ', LogR_acc)
 print('Maximum Prediction Accuracy of KNN : ', maxKNN_acc)
 print('Prediction Accuracy of Gaussian NB : ', GaussianNB_acc)
 print('Prediction Accuracy of Random Forest : ', RandomForest_acc)
-print('Prediction Accuracy of Decision Tree : ', DeicisionTree_acc)
+print('Prediction Accuracy of Decision Tree : ', DecisionTree_acc)
 print('Prediction Accuracy of SVM : ', SVM_acc)
 
 models = ['Logistic\nRegression', 'KNN', 'GaussianNB', 'Random\nForest', 'Decision\nTree', 'SVM']
-accuracy = [LogR_acc, maxKNN_acc, GaussianNB_acc, RandomForest_acc, DeicisionTree_acc, SVM_acc]
+accuracy = [LogR_acc, maxKNN_acc, GaussianNB_acc, RandomForest_acc, DecisionTree_acc, SVM_acc]
 
 barlist = plt.bar(models, accuracy)
 
