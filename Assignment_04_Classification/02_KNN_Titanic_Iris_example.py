@@ -57,6 +57,8 @@ for k in k_list:
 print('\n')
 
 # Plot the changes in accuracy according to the changes in the number of neighbors
+plt.figure(figsize=[20, 8])
+
 plt.subplot(1, 2, 1)
 plt.plot(k_list, accuracy, 'bo-')
 plt.xlabel('Number of Neigbhors in KNN')

@@ -105,6 +105,8 @@ print('Prediction Accuracy of SVM : ', SVM_acc)
 models = ['Logistic\nRegression', 'KNN', 'GaussianNB', 'Random\nForest', 'Decision\nTree', 'SVM']
 accuracy = [LogR_acc, maxKNN_acc, GaussianNB_acc, RandomForest_acc, DecisionTree_acc, SVM_acc]
 
+plt.figure(figsize=[20, 8])
+
 barlist = plt.bar(models, accuracy)
 
 barlist[0].set_color('red')
