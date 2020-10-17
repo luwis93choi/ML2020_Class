@@ -26,14 +26,14 @@ print('label count of y:', np.bincount(y))
 print('label count of y_train:', np.bincount(y_train))
 print('label count of y_test:', np.bincount(y_test))
 
-### 데이터셋 정규화 ###
-# 데이터셋 Standardization을 위해 z-score로 정규화하는 StandardScaler 사용
+### 데이터셋 표준화 ###
+# 데이터셋 Standardization을 위해 z-score로 표준화하는 StandardScaler 사용
 from sklearn.preprocessing import StandardScaler
 
 sc = StandardScaler()			# Standard Scaler 객체 선언
 sc.fit(X_train)				# Feature 데이터에 대한 Mean과 Standard Deviation 산출함
-X_train_std = sc.transform(X_train)	# Train 데이터셋 정규화
-X_test_std = sc.transform(X_test)	# Test 데이터셋 정규화
+X_train_std = sc.transform(X_train)	# Train 데이터셋 표준화
+X_test_std = sc.transform(X_test)	# Test 데이터셋 표준화
 
 ### Perceptron 학습 수행 ###
 # sklearn Perceptron 사용
@@ -42,10 +42,10 @@ from sklearn.linear_model import Perceptron
 ppn = Perceptron(max_iter=40, eta0=0.1, tol=1e-3, random_state=1)
 # 반복 횟수 40, Learning Rate 0.1, 정지 기준 Tolerance 0.001, 최초 weight 초기화 개수 (Seed, random_state) 1개로 Perceptron 선언
 
-# 정규화된 Train 데이터셋에 대해 Perceptron 학습 수행
+# 표준화된 Train 데이터셋에 대해 Perceptron 학습 수행
 ppn.fit(X_train_std, y_train)
 
-# 정규화된 Test 데이터셋에 대해 Prediction 수행
+# 표준화된 Test 데이터셋에 대해 Prediction 수행
 y_pred = ppn.predict(X_test_std)
 print('The number of misclassified sample : %d' % (y_test != y_pred).sum())	# Prediction 틀린 개수 출력
 
@@ -106,9 +106,9 @@ def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
 			    s=100, 
 			    label='test set')
 
-# 그래프로 그리기 위해 정규화된 모든 데이터셋을 합침
-X_combined_std = np.vstack((X_train_std, X_test_std))	# 정규화된 Feature 데이터셋을 합침
-y_combined = np.hstack((y_train, y_test))		# 정규화된 Label 데이터셋을 합침
+# 그래프로 그리기 위해 표준화된 모든 데이터셋을 합침
+X_combined_std = np.vstack((X_train_std, X_test_std))	# 표준화된 Feature 데이터셋을 합침
+y_combined = np.hstack((y_train, y_test))		# 표준화된 Label 데이터셋을 합침
 
 # Perceptron의 Prediction 결과를 Decision Boundary로 나타냄
 # Iris 데이터셋 모든 Label에 대해서 수행함
