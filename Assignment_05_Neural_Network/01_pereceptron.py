@@ -15,7 +15,7 @@ class Perceptron(object):
 		'''
 		self.eta = eta                      # Learning Rate 선언
 		self.n_iter = n_iter                # Regression 반복 횟수 선언
-		self.random_state = random_state    # 단일 Perceptron/Neuron에 입력될 최초 Weight (Seed)의 초기화 개수 선언
+		self.random_state = random_state    # 단일 Perceptron/Neuron에 입력될 Weight를 최초에 몇 개를 랜덤하게 초기화할지 선언 (Seed 선언)
 
 	# Perceptron의 Regression 함수
 	def fit(self, X, y):
@@ -24,11 +24,11 @@ class Perceptron(object):
 		y : 데이터셋의 Label/Target 데이터
 		'''
 		rgen = np.random.RandomState(self.random_state)
-		# Perceptron/Neuron에 입력되는 Weight 개수만큼 Weight 초기값(Seed)을 생성하기 위한 난수 발생기
+		# 사용자가 지정한 개수만큼 Perceptron/Neuron의 Weight의 전체 또는 일부에 대한 초기값(Seed)을 생성하기 위한 난수 발생기
 		# Reproducibility를 보장하기 위해 random_state를 설정하여 매번 동일한 형태의 난수를 발생하여 최초 Weight (Seed)를 설정하게함
 
 		self.w_ = rgen.normal(loc=0.0, scale=0.01, size=1 + X.shape[1])
-		# 입력 weight의 초기값을 Normal Distribution으로 구성된 랜덤한 값으로 설정함
+		# random_state 개수만큼 입력 weight의 초기값을 Normal Distribution으로 구성된 랜덤한 값으로 설정함
 
 		self.errors_ = []   # 매 Regression마다 발생하는 Error값 저장
 
