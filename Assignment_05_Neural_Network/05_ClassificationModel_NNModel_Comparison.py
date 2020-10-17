@@ -57,11 +57,18 @@ plt.xticks(np.arange(len(breast_cancer_dataset.feature_names))+1, breast_cancer_
 fg_ax2.set_title('Standardized Breast Cancer Dataset', fontdict={'weight':'bold'})
 
 ### Coefficient Matrix Heatmap ###
+correlation_mat = np.corrcoef(breast_cancer_dataset.data.T)
+fg_ax3 = main_fig.add_subplot(gs[0, 4:6])
+fg_ax3.set_title('Breast Cancer - Correlation Coefficient', fontdict={'weight':'bold'})
+plt.imshow(correlation_mat, interpolation='none', vmin=-1, vmax=1)
+plt.colorbar(shrink=0.7)
+plt.xticks(range(30),breast_cancer_dataset.feature_names,rotation=90,ha='center')
+plt.yticks(range(30),breast_cancer_dataset.feature_names)
 ##################################
 
 # Dataset Group 
 dataset_group = [{'name' : 'original', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None},
-                 {'name' : 'standardized', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None}]
+		 {'name' : 'standardized', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None}]
 
 # Split original / standardized breast cancer dataset into 70% training set and 30% test set
 (dataset_group[0]['X_train'], dataset_group[0]['X_test'], 
