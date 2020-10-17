@@ -149,7 +149,7 @@ def plot_decision_boundary(X, y, classifier, resolution=0.02):
 	plt.xlim(xx1.min(), xx1.max())	# 그래프 X 범위 설정
 	plt.ylim(xx2.min(), xx2.max())	# 그래프 y 범위 설정
 
-	# 주어진 Iris 데이터셋에 대한 Prediction 결과를 Scatter로 추가로 그려넣음
+	# 주어진 Iris 데이터셋에 대한 Prediction 결과를 Scatter Plot으로 추가로 그려넣음
 	for idx, cl in enumerate(np.unique(y)):
 		plt.scatter(x=X[y == cl, 0], 
 			    y=X[y == cl, 1],
