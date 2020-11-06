@@ -43,6 +43,7 @@ X_proj1 = X.dot(u1.reshape(-1, 1))      # Project the dataset onto vector u1
 X_proj2 = X.dot(u2.reshape(-1, 1))      # Project the dataset onto vector u2
 X_proj3 = X.dot(u3.reshape(-1, 1))      # Project the dataset onto vector u3
 
+# Plot the original dataset and potential principle components
 plt.figure(figsize=(8,4))
 plt.subplot2grid((3,2), (0, 0), rowspan=3)
 
@@ -63,6 +64,40 @@ plt.text(u3[0] + 0.1, u3[1], r"$\mathbf{c_3}$", fontsize=22)
 
 plt.xlabel("$x_1$", fontsize=18)
 plt.ylabel("$x_2$", fontsize=18, rotation=0)
-
 plt.grid(True)
+
+# Plot the distribution of u1-projected dataset
+plt.subplot2grid((3,2), (0, 1))
+plt.plot([-2, 2], [0, 0], "k-", linewidth=1)
+
+plt.plot(X_proj1[:, 0], np.zeros(m), "bo", alpha=0.3)   # Plot the dataset that is reprojected onto u1
+
+plt.gca().get_yaxis().set_ticks([])
+plt.gca().get_xaxis().set_ticklabels([])
+plt.axis([-2, 2, -1, 1])
+plt.grid(True)
+
+# Plot the distribution of u2-projected dataset
+plt.subplot2grid((3,2), (1, 1))
+plt.plot([-2, 2], [0, 0], "k--", linewidth=1)
+
+plt.plot(X_proj2[:, 0], np.zeros(m), "bo", alpha=0.3)   # Plot the dataset that is reprojected onto u2
+
+plt.gca().get_yaxis().set_ticks([])
+plt.gca().get_xaxis().set_ticklabels([])
+plt.axis([-2, 2, -1, 1])
+plt.grid(True)
+
+# Plot the distribution of u3-projected dataset
+plt.subplot2grid((3,2), (2, 1))
+plt.plot([-2, 2], [0, 0], "k:", linewidth=2)
+
+plt.plot(X_proj3[:, 0], np.zeros(m), "bo", alpha=0.3)   # Plot the dataset that is reprojected onto u3
+
+plt.gca().get_yaxis().set_ticks([])
+plt.axis([-2, 2, -1, 1])
+plt.xlabel("$z_1$", fontsize=18)
+plt.grid(True)
+
+save_fig("pca_best_projection_plot")
 plt.show()
