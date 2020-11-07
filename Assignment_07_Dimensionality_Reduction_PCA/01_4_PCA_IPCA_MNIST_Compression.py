@@ -86,6 +86,8 @@ pca = PCA(n_components=154)                     # PCA object for producing 154 p
 X_reduced = pca.fit_transform(X_train)          # Produce Re-Organized dataset (sklearn API includes standardization)
 X_recovered = pca.inverse_transform(X_reduced)  # Reproject Re-Organized dataset back to original feature space
 
+X_reduced_pca = X_reduced   # Save PCA-based Re-Organized dataset
+
 # Comparison between original image dataset and PCA image dataset 
 plt.figure(figsize=(7, 4))
 plt.subplot(121)
@@ -108,10 +110,11 @@ inc_pca = IncrementalPCA(n_components=154)
 for X_batch in np.array_split(X_train, n_batches):
     print('.', end='')
     inc_pca.partial_fit(X_batch)
+print()
 
-X_reduced = inc_pca.transform(X_train)
+X_reduced_inc_pca = inc_pca.transform(X_train)
 
-X_recovered_inc_pca = inc_pca.inverse_transform(X_reduced)
+X_recovered_inc_pca = inc_pca.inverse_transform(X_reduced_inc_pca)
 
 # Comparison between PCA image dataset and IPCA image dataset 
 plt.figure(figsize=(7, 4))
@@ -121,3 +124,11 @@ plt.subplot(122)
 plot_digits(X_recovered_inc_pca[::2100])
 plt.tight_layout()
 plt.show()
+
+####################################################################################################################################################
+### Comparison between PCA and IPCA ################################################################################################################
+####################################################################################################################################################
+
+print(np.allclose(pca.mean_, inc_pca.mean_))
+
+print(np.allclose(X_reduced_pca, X_reduced_inc_pca))
