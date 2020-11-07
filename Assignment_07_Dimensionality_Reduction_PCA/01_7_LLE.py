@@ -24,11 +24,21 @@ def save_fig(fig_id, tight_layout=True, fig_extension='png', resolution=300):
         plt.tight_layout()
     plt.savefig(path, format=fig_extension, dpi=resolution)
 
+####################################################################################################################################################
+### Prepare 3D Swiss Roll Dataset ##################################################################################################################
+####################################################################################################################################################
 X, t = make_swiss_roll(n_samples=1000, noise=0.2, random_state=41)
 
-lle = LocallyLinearEmbedding(n_components=2, n_neighbors=10, random_state=42)
-X_reduced = lle.fit_transform(X)
+####################################################################################################################################################
+### LLE (Locally Linear Embedding) - NonLinear Dimensionality Reduction Technique / Manifold Learning ##############################################
+####################################################################################################################################################
 
+lle = LocallyLinearEmbedding(n_components=2, n_neighbors=10, random_state=42)       
+# LLE PCA object that produces 2 principle component from 10 neighbors around each data
+
+X_reduced = lle.fit_transform(X)    # Re-Organize the dataset with principle components
+
+# Plot the unrolled swiss roll that is produced by LLE
 plt.title("Unrolled swiss roll using LLE", fontsize=14)
 plt.scatter(X_reduced[:, 0], X_reduced[:, 1], c=t, cmap=plt.cm.hot)
 plt.xlabel("$z_1$", fontsize=18)

@@ -29,15 +29,17 @@ def save_fig(fig_id, tight_layout=True, fig_extension='png', resolution=300):
         plt.tight_layout()
     plt.savefig(path, format=fig_extension, dpi=resolution)
 
-### Prepare 3D Swiss Roll Dataset
+####################################################################################################################################################
+### Prepare 3D Swiss Roll Dataset ##################################################################################################################
+####################################################################################################################################################
 X, t = make_swiss_roll(n_samples=1000, noise=0.2, random_state=42)
 
-### Kernel PCA with different types of kernel
-lin_pca = KernelPCA(n_components=2, kernel='linear', fit_inverse_transform=True)                            # Linear PCA with Linear Kernel
-rbf_pca = KernelPCA(n_components=2, kernel="rbf", gamma=0.0433, fit_inverse_transform=True)                 # RBF PCA with Radial Basis Functio Kernel
-sig_pca = KernelPCA(n_components=2, kernel="sigmoid", gamma=0.001, coef0=1, fit_inverse_transform=True)     # Sigmoid PCA with Sigmoid Kernel
-
-y = t > 6.9
+####################################################################################################################################################
+### Kernel PCA with different types of kernel ######################################################################################################
+####################################################################################################################################################
+lin_pca = KernelPCA(n_components=2, kernel='linear', fit_inverse_transform=True)                        # Linear PCA with Linear Kernel
+rbf_pca = KernelPCA(n_components=2, kernel="rbf", gamma=0.0433, fit_inverse_transform=True)             # RBF PCA with Radial Basis Functio Kernel
+sig_pca = KernelPCA(n_components=2, kernel="sigmoid", gamma=0.001, coef0=1, fit_inverse_transform=True) # Sigmoid PCA with Sigmoid Kernel
 
 plt.figure(figsize=(11, 4))
 
@@ -61,7 +63,9 @@ plt.show()
 
 plt.figure(figsize=(6, 5))
 
-### Reprojection of RBF PCA-based dataset
+####################################################################################################################################################
+### Reprojection of RBF PCA-based dataset ##########################################################################################################
+####################################################################################################################################################
 X_inverse = rbf_pca.inverse_transform(X_reduced_rbf)
 
 ax = plt.subplot(111, projection='3d')
@@ -77,7 +81,9 @@ ax.set_zticklabels([])
 save_fig("preimage_plot", tight_layout=False)
 plt.show()
 
-### Projection of dataset using RBF PCA
+####################################################################################################################################################
+### Projection of dataset using RBF PCA ############################################################################################################
+####################################################################################################################################################
 X_reduced = rbf_pca.fit_transform(X)
 
 plt.figure(figsize=(11, 4))
@@ -88,24 +94,33 @@ plt.ylabel("$z_2$", fontsize=18, rotation=0)
 plt.grid(True)
 plt.show()
 
+####################################################################################################################################################
+### Finding the best Kernel PCA parameter for Logistic Regression ##################################################################################
+####################################################################################################################################################
+# Re-Organize the dataset with princple components through PCA
+# Conduct Logistic Regression with Re-Organized dataset
 clf = Pipeline([
         ("kpca", KernelPCA(n_components=2)),
         ("log_reg", LogisticRegression(solver="lbfgs"))
     ])
 
+# Parameters for Grid Search
 param_grid = [{
         "kpca__gamma": np.linspace(0.03, 0.05, 10),
         "kpca__kernel": ["rbf", "sigmoid"]
     }]
 
-grid_search = GridSearchCV(clf, param_grid, cv=3)
-grid_search.fit(X, y)
+y = t > 6.9     # Produce the output dataset based on the value of manifold
+                # For Logistic Regression, the dataset is composed of True/False
 
-print(grid_search.best_params_)
+grid_search = GridSearchCV(clf, param_grid, cv=3)   # Prepare the Grid Search
+grid_search.fit(X, y)       # Conduct Grid Search on current pipeline and find the best parameters
 
-rbf_pca = KernelPCA(n_components = 2, kernel="rbf", gamma=0.0433,
-                    fit_inverse_transform=True)
-X_reduced = rbf_pca.fit_transform(X)
-X_preimage = rbf_pca.inverse_transform(X_reduced)
+print(grid_search.best_params_)     # Print the best parameters
 
-print(mean_squared_error(X, X_preimage))
+# Prepare RBF PCA based on the best parameters
+rbf_pca = KernelPCA(n_components = 2, kernel="rbf", gamma=0.0433, fit_inverse_transform=True)
+X_reduced = rbf_pca.fit_transform(X)                # Re-Organize the dataset based on RBF PCA
+X_preimage = rbf_pca.inverse_transform(X_reduced)   # Reprojection of the dataset back to original feature space
+
+print(mean_squared_error(X, X_preimage))    # Print the error between original dataset and reprojected dataset
