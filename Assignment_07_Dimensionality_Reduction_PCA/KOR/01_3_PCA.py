@@ -34,19 +34,19 @@ m = 200
 np.random.seed(3)
 X = np.random.randn(m, 2) / 10
 
-X = X.dot(np.array([[stretch, 0], [0, 1]]))                                     # Stretch the vector by multiplying it with a constant value
-X = X.dot([[np.cos(angle), np.sin(angle)], [-np.sin(angle), np.cos(angle)]])    # Rotate the vector with rotation matrix
+X = X.dot(np.array([[stretch, 0], [0, 1]]))                                     # 벡터에 변수를 곱함으로서 벡터의 위치를 늘리는 효과를 가짐
+X = X.dot([[np.cos(angle), np.sin(angle)], [-np.sin(angle), np.cos(angle)]])    # 벡터에 Rotation Matrix(회전 행렬)을 곱함으로서 벡터를 회전시킴
 
 ####################################################################################################################################################
 ### Prepare principle components and Re-Organize the dataset #######################################################################################
 ####################################################################################################################################################
-u1 = np.array([np.cos(angle), np.sin(angle)])                               # Unit vector with 36 degree / Potential principle component 1
-u2 = np.array([np.cos(angle - 2 * np.pi/6), np.sin(angle - 2 * np.pi/6)])   # Unit vector with -24 degree / Potential principle component 2
-u3 = np.array([np.cos(angle - np.pi/2), np.sin(angle - np.pi/2)])           # Unit vector with -54 degree / Potential principle component 3
+u1 = np.array([np.cos(angle), np.sin(angle)])                               # 36도로 배치된 Unit Vector u1 / Principle Component 후보군 1
+u2 = np.array([np.cos(angle - 2 * np.pi/6), np.sin(angle - 2 * np.pi/6)])   # -24도로 배치된 Unit Vector u2 / Principle Component 후보군 2
+u3 = np.array([np.cos(angle - np.pi/2), np.sin(angle - np.pi/2)])           # -54도로 배치된 Unit Vector u3 / Principle Component 후보군 3
 
-X_proj1 = X.dot(u1.reshape(-1, 1))      # Project the dataset onto vector u1
-X_proj2 = X.dot(u2.reshape(-1, 1))      # Project the dataset onto vector u2
-X_proj3 = X.dot(u3.reshape(-1, 1))      # Project the dataset onto vector u3
+X_proj1 = X.dot(u1.reshape(-1, 1))      # 데이터셋을 u1 벡터에 투영시킴
+X_proj2 = X.dot(u2.reshape(-1, 1))      # 데이터셋을 u2 벡터에 투영시킴
+X_proj3 = X.dot(u3.reshape(-1, 1))      # 데이터셋을 u3 벡터에 투영시킴
 
 ####################################################################################################################################################
 ### Plot the original dataset and potential principle components ###################################################################################
@@ -54,16 +54,16 @@ X_proj3 = X.dot(u3.reshape(-1, 1))      # Project the dataset onto vector u3
 plt.figure(figsize=(8,4))
 plt.subplot2grid((3,2), (0, 0), rowspan=3)
 
-plt.plot([-1.4, 1.4], [-1.4*u1[1]/u1[0], 1.4*u1[1]/u1[0]], "k-", linewidth=1)   # Draw vector u1
-plt.plot([-1.4, 1.4], [-1.4*u2[1]/u2[0], 1.4*u2[1]/u2[0]], "k--", linewidth=1)  # Draw vector u2
-plt.plot([-1.4, 1.4], [-1.4*u3[1]/u3[0], 1.4*u3[1]/u3[0]], "k:", linewidth=2)   # Draw vector u3
+plt.plot([-1.4, 1.4], [-1.4*u1[1]/u1[0], 1.4*u1[1]/u1[0]], "k-", linewidth=1)   # u1 벡터를 그림
+plt.plot([-1.4, 1.4], [-1.4*u2[1]/u2[0], 1.4*u2[1]/u2[0]], "k--", linewidth=1)  # u2 벡터를 그림
+plt.plot([-1.4, 1.4], [-1.4*u3[1]/u3[0], 1.4*u3[1]/u3[0]], "k:", linewidth=2)   # u3 벡터를 그림
 
-plt.plot(X[:, 0], X[:, 1], "bo", alpha=0.5)     # Plot the dataset
+plt.plot(X[:, 0], X[:, 1], "bo", alpha=0.5)     # 원본 데이터셋을 그래프로 그림
 
 plt.axis([-1.4, 1.4, -1.4, 1.4])
-plt.arrow(0, 0, u1[0], u1[1], head_width=0.1, linewidth=5, length_includes_head=True, head_length=0.1, fc='k', ec='k')  # Draw the arrow of vector u1
-plt.arrow(0, 0, u2[0], u2[1], head_width=0.1, linewidth=5, length_includes_head=True, head_length=0.1, fc='k', ec='k')  # Draw the arrow of vector u2
-plt.arrow(0, 0, u3[0], u3[1], head_width=0.1, linewidth=5, length_includes_head=True, head_length=0.1, fc='k', ec='k')  # Draw the arrow of vector u2
+plt.arrow(0, 0, u1[0], u1[1], head_width=0.1, linewidth=5, length_includes_head=True, head_length=0.1, fc='k', ec='k')  # u1 벡터를 화살표를 그림
+plt.arrow(0, 0, u2[0], u2[1], head_width=0.1, linewidth=5, length_includes_head=True, head_length=0.1, fc='k', ec='k')  # u2 벡터를 화살표를 그림
+plt.arrow(0, 0, u3[0], u3[1], head_width=0.1, linewidth=5, length_includes_head=True, head_length=0.1, fc='k', ec='k')  # u3 벡터를 화살표를 그림
 
 plt.text(u1[0] + 0.1, u1[1] - 0.05, r"$\mathbf{c_1}$", fontsize=22)
 plt.text(u2[0] + 0.1, u2[1], r"$\mathbf{c_2}$", fontsize=22)
@@ -77,33 +77,33 @@ plt.grid(True)
 ### Plot the distribution of Re-Organized dataset ##################################################################################################
 ####################################################################################################################################################
 
-# Plot the distribution of u1-projected dataset
+# u1에 투영된 데이터셋읠 분포를 그래프로 그림
 plt.subplot2grid((3,2), (0, 1))
 plt.plot([-2, 2], [0, 0], "k-", linewidth=1)
 
-plt.plot(X_proj1[:, 0], np.zeros(m), "bo", alpha=0.3)   # Plot the dataset that is reprojected onto u1
+plt.plot(X_proj1[:, 0], np.zeros(m), "bo", alpha=0.3)   # u1에 투영된 데이터셋을 그래프로 그림
 
 plt.gca().get_yaxis().set_ticks([])
 plt.gca().get_xaxis().set_ticklabels([])
 plt.axis([-2, 2, -1, 1])
 plt.grid(True)
 
-# Plot the distribution of u2-projected dataset
+# u2에 투영된 데이터셋읠 분포를 그래프로 그림
 plt.subplot2grid((3,2), (1, 1))
 plt.plot([-2, 2], [0, 0], "k--", linewidth=1)
 
-plt.plot(X_proj2[:, 0], np.zeros(m), "bo", alpha=0.3)   # Plot the dataset that is reprojected onto u2
+plt.plot(X_proj2[:, 0], np.zeros(m), "bo", alpha=0.3)   # u2에 투영된 데이터셋을 그래프로 그림
 
 plt.gca().get_yaxis().set_ticks([])
 plt.gca().get_xaxis().set_ticklabels([])
 plt.axis([-2, 2, -1, 1])
 plt.grid(True)
 
-# Plot the distribution of u3-projected dataset
+# u3에 투영된 데이터셋읠 분포를 그래프로 그림
 plt.subplot2grid((3,2), (2, 1))
 plt.plot([-2, 2], [0, 0], "k:", linewidth=2)
 
-plt.plot(X_proj3[:, 0], np.zeros(m), "bo", alpha=0.3)   # Plot the dataset that is reprojected onto u3
+plt.plot(X_proj3[:, 0], np.zeros(m), "bo", alpha=0.3)   # u3에 투영된 데이터셋을 그래프로 그림
 
 plt.gca().get_yaxis().set_ticks([])
 plt.axis([-2, 2, -1, 1])
