@@ -116,7 +116,7 @@ X_reduced_inc_pca = inc_pca.transform(X_train)
 
 X_recovered_inc_pca = inc_pca.inverse_transform(X_reduced_inc_pca)
 
-# Comparison between PCA image dataset and IPCA image dataset 
+# Comparison between original image dataset and IPCA image dataset 
 plt.figure(figsize=(7, 4))
 plt.subplot(121)
 plot_digits(X_train[::2100])
