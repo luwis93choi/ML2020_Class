@@ -37,6 +37,7 @@ ax = fig.add_subplot(111, projection='3d')
 
 ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=t, cmap=plt.cm.hot)     # Draw 3D scatter plot of swiss roll
 
+# Set up plotting space
 ax.view_init(10, -70)
 ax.set_xlabel("$x_1$", fontsize=18)
 ax.set_ylabel("$x_2$", fontsize=18)
@@ -81,16 +82,12 @@ ax = plt.subplot(111, projection='3d')
 
 positive_class = X[:, 0] > 5        # Simple Decision Boundary based on Original Features
                                     # Data with Feature 0 that is higher than 5 is classified as positive class
-X_pos = X[positive_class]
-X_neg = X[~positive_class]
 
+X_pos = X[positive_class]           # Data classified as positive class
+X_neg = X[~positive_class]          # Data classified as negative class
+
+# Set up plotting space
 ax.view_init(10, -70)
-
-ax.plot(X_neg[:, 0], X_neg[:, 1], X_neg[:, 2], 'y^')
-ax.plot(X_pos[:, 0], X_pos[:, 1], X_pos[:, 2], 'gs')
-
-ax.plot_wireframe(5, x2, x3, alpha=0.5)
-
 ax.set_xlabel("$x_1$", fontsize=18)
 ax.set_ylabel("$x_2$", fontsize=18)
 ax.set_zlabel("$x_3$", fontsize=18)
@@ -98,14 +95,19 @@ ax.set_xlim(axes[0:2])
 ax.set_ylim(axes[2:4])
 ax.set_zlim(axes[4:6])
 
+ax.plot(X_neg[:, 0], X_neg[:, 1], X_neg[:, 2], 'y^')    # Plot negative class data according to original features
+ax.plot(X_pos[:, 0], X_pos[:, 1], X_pos[:, 2], 'gs')    # Plot positive class data according to original features
+
+ax.plot_wireframe(5, x2, x3, alpha=0.5)         # Set up decision plane of current dataset
+
 save_fig("manifold_decision_boundary_plot1")
 plt.show()
 
 fig = plt.figure(figsize=(5, 4))
 ax = plt.subplot(111)
 
-plt.plot(t[positive_class], X[positive_class, 1], 'gs')
-plt.plot(t[~positive_class], X[~positive_class, 1], 'y^')
+plt.plot(t[positive_class], X[positive_class, 1], 'gs')         # Plot positive class data according to Manifold value
+plt.plot(t[~positive_class], X[~positive_class, 1], 'y^')       # Plot negative class data according to Manifold value
 
 plt.axis([4, 15, axes[2], axes[3]])
 plt.xlabel("$z_1$", fontsize=18)
@@ -124,14 +126,12 @@ ax = plt.subplot(111, projection='3d')
 
 positive_class = 2 * (t[:] - 4) > X[:, 1]       # Complex Decision Boundary based on Manifold
                                                 # Data with Feature 1 above linear line made of Manifold is classified as positive class
-X_pos = X[positive_class]
-X_neg = X[~positive_class]
 
+X_pos = X[positive_class]          # Data classified as positive class
+X_neg = X[~positive_class]      # Data classified as negative class
+
+# Set up plotting space
 ax.view_init(10, -70)
-
-ax.plot(X_neg[:, 0], X_neg[:, 1], X_neg[:, 2], 'y^')
-ax.plot(X_pos[:, 0], X_pos[:, 1], X_pos[:, 2], 'gs')
-
 ax.set_xlabel("$x_1$", fontsize=18)
 ax.set_ylabel("$x_2$", fontsize=18)
 ax.set_zlabel("$x_3$", fontsize=18)
@@ -139,14 +139,17 @@ ax.set_xlim(axes[0:2])
 ax.set_ylim(axes[2:4])
 ax.set_zlim(axes[4:6])
 
+ax.plot(X_neg[:, 0], X_neg[:, 1], X_neg[:, 2], 'y^')        # Plot negative class data according to original features
+ax.plot(X_pos[:, 0], X_pos[:, 1], X_pos[:, 2], 'gs')        # Plot positive class data according to original features
+
 save_fig("manifold_decision_boundary_plot3")
 plt.show()
 
 fig = plt.figure(figsize=(5, 4))
 ax = plt.subplot(111)
 
-plt.plot(t[positive_class], X[positive_class, 1], 'gs')
-plt.plot(t[~positive_class], X[~positive_class, 1], 'y^')
+plt.plot(t[positive_class], X[positive_class, 1], 'gs')     # Plot positive class data according to Manifold value
+plt.plot(t[~positive_class], X[~positive_class, 1], 'y^')   # Plot negative class data according to Manifold value
 
 plt.plot([4, 15], [0, 22], "b-", linewidth=2)       # Draw the decision boundary based on Manifold
 
