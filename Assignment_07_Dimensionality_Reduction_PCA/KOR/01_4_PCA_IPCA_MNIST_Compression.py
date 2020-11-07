@@ -132,3 +132,6 @@ plt.show()
 print(np.allclose(pca.mean_, inc_pca.mean_))		# PCA 기반 데이터셋의 평균과 IPCA 기반 데이터셋의 평균을 비교함
 
 print(np.allclose(X_reduced_pca, X_reduced_inc_pca))	# PCA 기반 데이터셋 구성과 IPCA 기반 데이터셋의 구성을 비교함
+
+
+
