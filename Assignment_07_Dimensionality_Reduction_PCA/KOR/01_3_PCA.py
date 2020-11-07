@@ -10,13 +10,13 @@ from matplotlib import gridspec
 
 from sklearn.datasets import make_swiss_roll
 
-# Define the directory for saving the plotting results
+# 그래프 결과를 저장한 경로 정의
 PROJECT_ROOT_DIR = '.'
 CHAPTER_ID = 'dim_reduction'
 IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, 'images', CHAPTER_ID)
 os.makedirs(IMAGES_PATH, exist_ok=True)
 
-# Function of saving the plotting results
+# 그래프 결과를 저장하는 함수
 def save_fig(fig_id, tight_layout=True, fig_extension='png', resolution=300):
     path = os.path.join(IMAGES_PATH, fig_id + '.' + fig_extension)
     print('Save Image ', fig_id)
@@ -27,7 +27,7 @@ def save_fig(fig_id, tight_layout=True, fig_extension='png', resolution=300):
 ####################################################################################################################################################
 #### Prepare the random dataset ####################################################################################################################
 ####################################################################################################################################################
-angle = np.pi / 5   # Degree 36
+angle = np.pi / 5   # 36도
 stretch = 5
 m = 200
 
