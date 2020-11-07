@@ -4,20 +4,17 @@ import sklearn
 import mglearn
 
 from sklearn.datasets import load_breast_cancer
-from sklearn.datasets import fetch_lfw_people
-from sklearn.datasets import load_digits
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
 
 # Display PCA computation process
 mglearn.plots.plot_pca_illustration()
 plt.show()
 
+####################################################################################################################################################
+### Dataset Preparation and Analysis ###############################################################################################################
+####################################################################################################################################################
 # Load breast cancer dataset
 cancer = load_breast_cancer()
 
@@ -41,19 +38,26 @@ plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, hspace=0.5)
 plt.show()
 
 # Dataset standardization
-scaler = StandardScaler()
-scaler.fit(cancer.data)
-X_scaled = scaler.transform(cancer.data)
+scaler = StandardScaler()                   # Prepare standard scaler
+scaler.fit(cancer.data)                     # Acquire mean and standard deviation of the dataset
+X_scaled = scaler.transform(cancer.data)    # Standardize the dataset
 
-# Principle Component Analysis
-pca = PCA(n_components=2)
-pca.fit(X_scaled)
+####################################################################################################################################################
+### Principle Component Analysis of Breast Cancer Dataset ##########################################################################################
+####################################################################################################################################################
+pca = PCA(n_components=2)   # PCA object that produces 2 principle components
+pca.fit(X_scaled)           # Fit PCA object with standardized dataset
 
-X_pca = pca.transform(X_scaled)
+X_pca = pca.transform(X_scaled)     # Re-Organize/Transform the dataset based on principle components
 
-print('Original shape : {}'.format(str(X_scaled.shape)))
-print('Reduced shape : {}'.format(str(X_pca.shape)))
+print('Original shape : {}'.format(str(X_scaled.shape)))    # Print the shape of original data
+print('Reduced shape : {}'.format(str(X_pca.shape)))        # Print the shape of PCA-based data
 
+####################################################################################################################################################
+### Result Plotting ################################################################################################################################
+####################################################################################################################################################
+
+# Plot Re-Organized dataset
 plt.figure(figsize=(8,8))
 mglearn.discrete_scatter(X_pca[:,0], X_pca[:,1],cancer.target)
 plt.legend(["malignant", "benign"], loc="best")
@@ -62,10 +66,11 @@ plt.xlabel("First principal component")
 plt.ylabel("Second principal component")    
 plt.show()      
 
-print('PCA shape : ', pca.components_.shape)
+print('PCA shape : ', pca.components_.shape)    # Print the shape of principle components
 
-print('PCA components : ', pca.components_)
+print('PCA components : ', pca.components_)     # Print principle components
 
+# Plot the principle components
 plt.matshow(pca.components_, cmap='viridis')
 plt.yticks([0, 1], ["First component", "Second component"])
 plt.colorbar()
