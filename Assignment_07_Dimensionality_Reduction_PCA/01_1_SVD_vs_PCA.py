@@ -107,8 +107,9 @@ print(np.mean(np.sum(np.square(X3D_inv - X), axis=1)))  # Print error rate betwe
 
 X3D_inv_using_svd = X2D_using_svd.dot(Vt[:2, :])    # Reprojection back to original space using SVD results
 
-print(np.allclose(X3D_inv_using_svd, X3D_inv - pca.mean_))  # Verify if SVD-based recovered dataset and PCA-bsed recovered dataset are similar to each other
-                                                            # Subtract mean of dataset since sklearn PCA automatically adds up mean in its API
+print(np.allclose(X3D_inv_using_svd, X3D_inv - pca.mean_))  
+# Verify if SVD-based recovered dataset and PCA-bsed recovered dataset are similar to each other
+# Subtract mean of dataset since sklearn PCA automatically adds up mean in its API
 
 print(pca.components_)      # Print top 2 principle components from PCA
 
@@ -158,8 +159,10 @@ ax.plot(X3D_below[:, 0], X3D_below[:, 1], X3D_below[:, 2], "bo", alpha=0.5)
 
 ax.plot_surface(x1, x2, z, alpha=0.2, color="k")    # Draw 2D plane made of top 2 principle components from PCA
 np.linalg.norm(C, axis=0)
-ax.add_artist(Arrow3D([0, C[0, 0]],[0, C[0, 1]],[0, C[0, 2]], mutation_scale=15, lw=1, arrowstyle="-|>", color="k"))    # Draw the arrow for principle component
-ax.add_artist(Arrow3D([0, C[1, 0]],[0, C[1, 1]],[0, C[1, 2]], mutation_scale=15, lw=1, arrowstyle="-|>", color="k"))    # Draw the arrow for principle component
+# Draw the arrow for principle component
+ax.add_artist(Arrow3D([0, C[0, 0]],[0, C[0, 1]],[0, C[0, 2]], mutation_scale=15, lw=1, arrowstyle="-|>", color="k")) 
+# Draw the arrow for principle component   
+ax.add_artist(Arrow3D([0, C[1, 0]],[0, C[1, 1]],[0, C[1, 2]], mutation_scale=15, lw=1, arrowstyle="-|>", color="k"))    
 ax.plot([0], [0], [0], "k.")
 
 # Draw line between original dataset and reprojected data
