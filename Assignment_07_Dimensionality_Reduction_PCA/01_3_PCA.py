@@ -28,13 +28,18 @@ angle = np.pi / 5   # Degree 36
 stretch = 5
 m = 200
 
-# Prepare the random dataset
+####################################################################################################################################################
+#### Prepare the random dataset ####################################################################################################################
+####################################################################################################################################################
 np.random.seed(3)
 X = np.random.randn(m, 2) / 10
 
 X = X.dot(np.array([[stretch, 0], [0, 1]]))                                     # Stretch the vector by multiplying it with a constant value
 X = X.dot([[np.cos(angle), np.sin(angle)], [-np.sin(angle), np.cos(angle)]])    # Rotate the vector with rotation matrix
 
+####################################################################################################################################################
+### Prepare principle components and Re-Organize the dataset #######################################################################################
+####################################################################################################################################################
 u1 = np.array([np.cos(angle), np.sin(angle)])                               # Unit vector with 36 degree / Potential principle component 1
 u2 = np.array([np.cos(angle - 2 * np.pi/6), np.sin(angle - 2 * np.pi/6)])   # Unit vector with -24 degree / Potential principle component 2
 u3 = np.array([np.cos(angle - np.pi/2), np.sin(angle - np.pi/2)])           # Unit vector with -54 degree / Potential principle component 3
@@ -43,7 +48,9 @@ X_proj1 = X.dot(u1.reshape(-1, 1))      # Project the dataset onto vector u1
 X_proj2 = X.dot(u2.reshape(-1, 1))      # Project the dataset onto vector u2
 X_proj3 = X.dot(u3.reshape(-1, 1))      # Project the dataset onto vector u3
 
-# Plot the original dataset and potential principle components
+####################################################################################################################################################
+### Plot the original dataset and potential principle components ###################################################################################
+####################################################################################################################################################
 plt.figure(figsize=(8,4))
 plt.subplot2grid((3,2), (0, 0), rowspan=3)
 
@@ -65,6 +72,10 @@ plt.text(u3[0] + 0.1, u3[1], r"$\mathbf{c_3}$", fontsize=22)
 plt.xlabel("$x_1$", fontsize=18)
 plt.ylabel("$x_2$", fontsize=18, rotation=0)
 plt.grid(True)
+
+####################################################################################################################################################
+### Plot the distribution of Re-Organized dataset ##################################################################################################
+####################################################################################################################################################
 
 # Plot the distribution of u1-projected dataset
 plt.subplot2grid((3,2), (0, 1))
