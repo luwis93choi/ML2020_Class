@@ -9,14 +9,13 @@ import sklearn
 from sklearn.datasets import make_blobs
 from sklearn.cluster import AgglomerativeClustering
 
-cmap = get_cmap('Pastel1')
-
 X, y = make_blobs(n_samples=1000, random_state=1)
 
 agg = AgglomerativeClustering(n_clusters=3)
 
 cluster = agg.fit_predict(X)
 
+cmap = get_cmap('Pastel1')
 legend = []
 for label in range(agg.n_clusters_):
     
