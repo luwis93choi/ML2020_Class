@@ -46,7 +46,7 @@ X_reconstructed_nmf = np.dot(nmf.transform(X_test), nmf.components_)        # Re
 
 ### Display the image reconstruction results of PCA, NMF, K-Means ##################################################################################
 
-# Display the image reconstruction results based on PCA features and NMF features
+# Display the feature extraction results based on PCA features, NMF features, and K-Means clusters
 fig, axes = plt.subplots(3, 5, figsize=(8, 8), subplot_kw={'xticks': (), 'yticks': ()})
 fig.suptitle("extracted feature")
 for ax, comp_kmeans, comp_pca, comp_nmf in zip(
@@ -59,7 +59,7 @@ axes[0, 0].set_ylabel("kmeans")
 axes[1, 0].set_ylabel("pca")
 axes[2, 0].set_ylabel("nmf")
 
-# Display the image reconstruction results based on clusters of K-Means
+# Display the image reconstruction results based on PCA features, NMF features, and K-Means clusters
 fig, axes = plt.subplots(4, 5, subplot_kw={'xticks': (), 'yticks': ()},
                          figsize=(8, 8))
 fig.suptitle("reconstructed")
