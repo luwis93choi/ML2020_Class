@@ -37,7 +37,7 @@ maxs = X.max(axis=0) + 0.1
 xx, yy = np.meshgrid(np.linspace(mins[0], maxs[0], 1000),
                      np.linspace(mins[1], maxs[1], 1000))
 
-# Subplot 2 ####################################################################################################################################################
+# Subplot 1 ####################################################################################################################################################
 plt.subplot(121)
 plt.title("K-Means with 3 Clusters", fontsize=14)
 
@@ -57,7 +57,7 @@ plt.xlabel("$x_1$", fontsize=14)
 plt.ylabel("$x_2$", fontsize=14, rotation=0)
 
 
-# Subplot 3 ####################################################################################################################################################
+# Subplot 2 ####################################################################################################################################################
 plt.subplot(122)
 plt.title("K-Means with 8 Clusters", fontsize=14)
 
@@ -78,11 +78,15 @@ plt.ylabel("$x_2$", fontsize=14, rotation=0)
 
 plt.show()
 
-print('Inertia of K-Means with 3 clusters'.format(kmeans_k3.inertia_))
-print('Inerita of K-Means with 8 clusters'.format(kmeans_k8.inertia_))
+print('Inertia of K-Means with 3 clusters : {}'.format(kmeans_k3.inertia_))
+print('Inerita of K-Means with 8 clusters : {}'.format(kmeans_k8.inertia_))
 
+# Acquire an optimum number of clusters using elbow of K-Means inertia graph
+
+# K-Means clustering with various number of clusters
 kmeans_per_k = [KMeans(n_clusters=k, random_state=42).fit(X) for k in range(1, 10)]
 
+# Save the inertia of each K-Means results
 inertias = [model.inertia_ for model in kmeans_per_k]
 
 plt.figure(figsize=(8, 3.5))
@@ -102,7 +106,7 @@ plt.show()
 plt.title("K-Means with 4 Clusters (Inertia {})".format(kmeans_per_k[3].inertia_), fontsize=14)
 
 Z = kmeans_per_k[3].predict(np.c_[xx.ravel(), yy.ravel()])   # Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
-Z = Z.reshape(xx.shape)                             # Reshape for plotting
+Z = Z.reshape(xx.shape)                                      # Reshape for plotting
 
 plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")            # Color all the (x1, x2) points with height according to cluster label
 plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   # Connect and draw the contour lines
