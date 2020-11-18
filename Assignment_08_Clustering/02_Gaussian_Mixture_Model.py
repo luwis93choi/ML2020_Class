@@ -14,7 +14,7 @@ from sklearn.datasets import make_blobs
 ### Iris Data Clustering using Gaussain Mixture Model ###
 #########################################################
 
-### Prepare Iris dataset ###
+### Prepare Iris dataset ##########################################################################################################################
 data = load_iris()
 X = data.data               # X : Input data of Iris dataset
 y = data.target             # y : Target label of Iris dataset
@@ -38,7 +38,7 @@ plt.xlabel("Petal length", fontsize=14)
 plt.tick_params(labelleft=False)
 plt.show()
 
-### Gaussian Mixture Model (GMM) for clustering Iris dataset ###
+### Gaussian Mixture Model (GMM) for clustering Iris dataset #####################################################################################
 GMM = GaussianMixture(n_components=3, n_init=10, random_state=42).fit(X)    # Fit GMM with current Iris dataset
 
 y_pred = GMM.predict(X)     # Cluster Iris dataset
@@ -65,7 +65,7 @@ print('Accuracy : {}'.format(np.sum(y==y_pred) / len(y_pred)))
 ### Random Data Clustering using Gaussian Mixture Model ###
 ###########################################################
 
-### Prepare random dataset with blob distribution ###
+### Prepare random dataset with blob distribution #################################################################################################
 X1, y1 = make_blobs(n_samples=1000, centers=((4, -4), (0, 0)), random_state=42)
 X1 = X1.dot(np.array([[0.374, 0.95], [0.732, 0.598]]))
 X2, y2 = make_blobs(n_samples=250, centers=1, random_state=42)
@@ -73,7 +73,7 @@ X2 = X2 + [6, -8]
 X = np.r_[X1, X2]
 y = np.r_[y1, y2]
 
-### Gaussian Mixture Model (GMM) for given random dataset ###
+### Gaussian Mixture Model (GMM) for given random dataset #########################################################################################
 GMM = GaussianMixture(n_components=3, n_init=10, random_state=42)
 
 GMM.fit(X)  # Fit GMM with given random dataset
@@ -84,7 +84,7 @@ print('Is GMM converged? : {}'.format(GMM.converged_))
 print('Number of convergence in GMM : {}'.format(GMM.n_iter_))
 print('Probability Density Function of each point in dataset : {}'.format(GMM.score_samples(X)))
 
-### Plotting GMM data clusters as countours according to their probability distribution ###
+### Plotting GMM data clusters as countours according to their probability distribution ###########################################################
 # Segment GMM clusters by clustering all the points within X range and Y range
 # Acquire the value range of x1 and x2
 mins = X.min(axis=0) - 0.1
@@ -96,13 +96,15 @@ xx, yy = np.meshgrid(np.linspace(mins[0], maxs[0], 1000),
 
 plt.title("GMM with 3 Components", fontsize=14)
 
-Z = -GMM.score_samples(np.c_[xx.ravel(), yy.ravel()])   # Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
+# Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
+Z = -GMM.score_samples(np.c_[xx.ravel(), yy.ravel()])   
 Z = Z.reshape(xx.shape)                                 # Reshape for plotting
 
-plt.contourf(xx, yy, Z, norm=LogNorm(vmin=1.0, vmax=30.0), 
-                        levels=np.logspace(0, 2, 12))            # Color all the (x1, x2) points with normalized color according to cluster label
-plt.contour(xx, yy, Z, norm=LogNorm(vmin=1.0, vmax=30.0), 
-                       levels=np.logspace(0, 2, 12), linewidths=1, colors='k')   # Connect and draw the contour lines
+# Color all the (x1, x2) points with normalized color according to cluster label
+plt.contourf(xx, yy, Z, norm=LogNorm(vmin=1.0, vmax=30.0), levels=np.logspace(0, 2, 12))      
+
+# Connect and draw the contour lines
+plt.contour(xx, yy, Z, norm=LogNorm(vmin=1.0, vmax=30.0), levels=np.logspace(0, 2, 12), linewidths=1, colors='k')   
 
 plt.scatter(X[:, 0], X[:, 1], c='k', s=1)     # Plot the data on the contour
 

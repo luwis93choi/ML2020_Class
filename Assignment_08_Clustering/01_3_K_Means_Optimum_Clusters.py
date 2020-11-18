@@ -8,6 +8,11 @@ import sklearn
 from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
 
+#############################################################################
+### Determine Optimum Number of Clusters for Effective K-Means Clustering ###
+#############################################################################
+
+### Prepare the dataset #########################################################################################################################
 # Blob centers
 blob_centers = np.array([[ 0.2,  2.3],
                          [-1.5 ,  2.3],
@@ -22,12 +27,14 @@ blob_std = np.array([0.4, 0.3, 0.1, 0.1, 0.1])
 X, y = make_blobs(n_samples=2000, centers=blob_centers,
                   cluster_std=blob_std, random_state=7)
 
-kmeans_k3 = KMeans(n_clusters=3, random_state=42)
-kmeans_k8 = KMeans(n_clusters=8, random_state=42)
+### Prepare K-Means clusterer with diffferent number of clusters #################################################################################
+kmeans_k3 = KMeans(n_clusters=3, random_state=42)   # K-Means clusterer with 3 clusters
+kmeans_k8 = KMeans(n_clusters=8, random_state=42)   # K-Means clusterer with 8 clusters
 
-kmeans_k3.fit(X)
+kmeans_k3.fit(X)    # Fit 
 kmeans_k8.fit(X)
 
+### K-Means clustering reuslt plotting ###########################################################################################################
 # Segment K-Means clusters by clustering all the points within X range and Y range
 # Acquire the value range of x1 and x2
 mins = X.min(axis=0) - 0.1
@@ -37,15 +44,19 @@ maxs = X.max(axis=0) + 0.1
 xx, yy = np.meshgrid(np.linspace(mins[0], maxs[0], 1000),
                      np.linspace(mins[1], maxs[1], 1000))
 
-# Subplot 1 ####################################################################################################################################################
+# Subplot 1 ########################################################################################################################################
 plt.subplot(121)
 plt.title("K-Means with 3 Clusters", fontsize=14)
 
-Z = kmeans_k3.predict(np.c_[xx.ravel(), yy.ravel()])   # Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
+# Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
+Z = kmeans_k3.predict(np.c_[xx.ravel(), yy.ravel()])   
 Z = Z.reshape(xx.shape)                             # Reshape for plotting
 
-plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")            # Color all the (x1, x2) points with height according to cluster label
-plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   # Connect and draw the contour lines
+# Color all the (x1, x2) points with height according to cluster label
+plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")    
+
+# Connect and draw the contour lines
+plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   
 
 plt.scatter(X[:, 0], X[:, 1], c='k', s=1)     # Plot the data on the contour
 
@@ -57,15 +68,19 @@ plt.xlabel("$x_1$", fontsize=14)
 plt.ylabel("$x_2$", fontsize=14, rotation=0)
 
 
-# Subplot 2 ####################################################################################################################################################
+# Subplot 2 ##########################################################################################################################################
 plt.subplot(122)
 plt.title("K-Means with 8 Clusters", fontsize=14)
 
-Z = kmeans_k8.predict(np.c_[xx.ravel(), yy.ravel()])   # Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
+# Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
+Z = kmeans_k8.predict(np.c_[xx.ravel(), yy.ravel()])  
 Z = Z.reshape(xx.shape)                             # Reshape for plotting
 
-plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")            # Color all the (x1, x2) points with height according to cluster label
-plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   # Connect and draw the contour lines
+# Color all the (x1, x2) points with height according to cluster label
+plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")          
+
+# Connect and draw the contour lines
+plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   
 
 plt.scatter(X[:, 0], X[:, 1], c='k', s=1)     # Plot the data on the contour
 
@@ -78,6 +93,7 @@ plt.ylabel("$x_2$", fontsize=14, rotation=0)
 
 plt.show()
 
+### Determine optimum number of cluster with the inertia of K-Means clustering ########################################################################
 print('Inertia of K-Means with 3 clusters : {}'.format(kmeans_k3.inertia_))
 print('Inerita of K-Means with 8 clusters : {}'.format(kmeans_k8.inertia_))
 
@@ -102,14 +118,20 @@ plt.annotate('Elbow',
             )
 plt.axis([1, 8.5, 0, 1300])
 plt.show()
+# This plot shows that 4 cluster is an optimum number of clusters for current K-Means settting
 
+### Optimum K-Means clustering reuslt plotting ###########################################################################################################
 plt.title("K-Means with 4 Clusters (Inertia {})".format(kmeans_per_k[3].inertia_), fontsize=14)
 
-Z = kmeans_per_k[3].predict(np.c_[xx.ravel(), yy.ravel()])   # Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
-Z = Z.reshape(xx.shape)                                      # Reshape for plotting
+# Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
+Z = kmeans_per_k[3].predict(np.c_[xx.ravel(), yy.ravel()])   
+Z = Z.reshape(xx.shape)         # Reshape for plotting
 
-plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")            # Color all the (x1, x2) points with height according to cluster label
-plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   # Connect and draw the contour lines
+# Color all the (x1, x2) points with height according to cluster label
+plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")   
+
+# Connect and draw the contour lines        
+plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   
 
 plt.scatter(X[:, 0], X[:, 1], c='k', s=1)     # Plot the data on the contour
 

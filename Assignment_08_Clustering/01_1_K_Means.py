@@ -8,7 +8,11 @@ import sklearn
 from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
 
-### Prepare blob dataset ###
+############################################
+### K-Means clustering on random dataset ###
+############################################
+
+### Prepare blob dataset ###########################################################################################################################
 
 # Blob centers
 blob_centers = np.array([[ 0.2,  2.3],
@@ -17,14 +21,14 @@ blob_centers = np.array([[ 0.2,  2.3],
                          [-2.8,  2.8],
                          [-2.8,  1.3]])
 
-# Blob standard deviation to define the distribution of dataset
+# Blob standard deviation to define the distribution of dataset 
 blob_std = np.array([0.4, 0.3, 0.1, 0.1, 0.1])
 
 # Produce the blob with centers and standard deviation
 X, y = make_blobs(n_samples=2000, centers=blob_centers,
                   cluster_std=blob_std, random_state=7)
 
-### K-Means Clustering Fitting ###
+### K-Means Clustering Fitting #####################################################################################################################
 k = 5
 kmeans = KMeans(n_clusters=k, random_state=42)
 y_pred = kmeans.fit_predict(X)
@@ -35,7 +39,7 @@ print(y_pred is kmeans.labels_)
 
 print(kmeans.cluster_centers_)
 
-### K-Means Clustering Result Plotting ###
+### K-Means Clustering Result Plotting #############################################################################################################
 plt.figure(figsize=(8, 4))
 
 # Segment K-Means clusters by clustering all the points within X range and Y range
@@ -46,12 +50,16 @@ maxs = X.max(axis=0) + 0.1
 # Acquire all the (x1, x2) points within the range
 xx, yy = np.meshgrid(np.linspace(mins[0], maxs[0], 1000),
                      np.linspace(mins[1], maxs[1], 1000))
+                     
+# Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
+Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()])   
+Z = Z.reshape(xx.shape)         # Reshape for plotting
 
-Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()])   # Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
-Z = Z.reshape(xx.shape)                             # Reshape for plotting
+# Color all the (x1, x2) points with height according to cluster label
+plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")            
 
-plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")            # Color all the (x1, x2) points with height according to cluster label
-plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   # Connect and draw the contour lines
+# Connect and draw the contour lines
+plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), linewidths=1, colors='k')   
 
 plt.scatter(X[:, 0], X[:, 1], c=y, s=1)     # Plot the data on the contour
 
@@ -65,7 +73,7 @@ plt.title('Voronoi Plot of K-Means')
 
 plt.show()
 
-### Hard Clustering of K-Means ###
+### Hard Clustering of K-Means #####################################################################################################################
 X_new = np.array([[0, 2], [3, 2], [-3, 3], [-3, 2.5]])  # Prepare a new random dataset
 
 # Show each input data's distance to each cluster
