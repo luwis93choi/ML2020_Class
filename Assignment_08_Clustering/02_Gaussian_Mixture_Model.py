@@ -66,13 +66,13 @@ GMM = GaussianMixture(n_components=3, n_init=10, random_state=42)
 
 GMM.fit(X)
 
-print(GMM.weights_)
-print(GMM.means_)
-print(GMM.converged_)
-print(GMM.n_iter_)
-print(GMM.score_samples(X))
+print('GMM weights : {}'.format(GMM.weights_))
+print('GMM means : {}'.format(GMM.means_))
+print('Is GMM converged? : {}'.format(GMM.converged_))
+print('Number of convergence in GMM : {}'.format(GMM.n_iter_))
+print('Probability Density Function of each point in dataset : {}'.format(GMM.score_samples(X)))
 
-# Segment K-Means clusters by clustering all the points within X range and Y range
+# Segment GMM clusters by clustering all the points within X range and Y range
 # Acquire the value range of x1 and x2
 mins = X.min(axis=0) - 0.1
 maxs = X.max(axis=0) + 0.1
@@ -84,10 +84,10 @@ xx, yy = np.meshgrid(np.linspace(mins[0], maxs[0], 1000),
 plt.title("GMM with 3 Components", fontsize=14)
 
 Z = -GMM.score_samples(np.c_[xx.ravel(), yy.ravel()])   # Cluster all the (x1, x2) points within the range / Cluster labels are used as height of contour
-Z = Z.reshape(xx.shape)                             # Reshape for plotting
+Z = Z.reshape(xx.shape)                                 # Reshape for plotting
 
 plt.contourf(xx, yy, Z, norm=LogNorm(vmin=1.0, vmax=30.0), 
-                        levels=np.logspace(0, 2, 12))            # Color all the (x1, x2) points with height according to cluster label
+                        levels=np.logspace(0, 2, 12))            # Color all the (x1, x2) points with normalized color according to cluster label
 plt.contour(xx, yy, Z, norm=LogNorm(vmin=1.0, vmax=30.0), 
                        levels=np.logspace(0, 2, 12), linewidths=1, colors='k')   # Connect and draw the contour lines
 
