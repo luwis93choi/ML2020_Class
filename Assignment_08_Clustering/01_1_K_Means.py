@@ -35,9 +35,9 @@ print(y_pred is kmeans.labels_)
 
 print(kmeans.cluster_centers_)
 
+### K-Means Clustering Result Plotting ###
 plt.figure(figsize=(8, 4))
 
-### K-Means Clustering Result Plotting ###
 # Segment K-Means clusters by clustering all the points within X range and Y range
 # Acquire the value range of x1 and x2
 mins = X.min(axis=0) - 0.1
