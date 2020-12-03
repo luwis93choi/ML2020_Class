@@ -155,5 +155,5 @@ class GMM:
 if __name__ == '__main__':
 
     # Blob 또는 Moon 데이터 500개 데이터셋에 대해 200회 EM Algorithm을 통해 GMM Clustering 수행함
-    GMM = GMM(iterations=200, dataset_type='blob', n_samples=500)	
+    GMM = GMM(iterations=200, dataset_type='moon', n_samples=500)	
     GMM.run(random_init=True)
