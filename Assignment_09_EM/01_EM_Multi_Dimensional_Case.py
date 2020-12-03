@@ -8,7 +8,7 @@ class GMM:
 
     # GMM 생성자
     def __init__(self, iterations, dataset_type='blob', n_samples=2000):
-
+        
         self.iterations = iterations	# GMM을 최적화기 위한 EM Algorithm 반복 횟수
         self.mu = None		# 각 Gaussian Cluster별 Mean값 리스트
         self.cov = []		# 각 Gaussian Cluster별 Covariance Matrix 리스트
@@ -16,14 +16,12 @@ class GMM:
 
         # 데이터셋 종류에 따라 준비함
         if dataset_type is 'blob':	# Blob 데이터셋 준비
-
             X, Y = make_blobs(cluster_std=1.5, random_state=20, n_samples=n_samples, centers=5)		# Blob 데이터셋 생성
             X = np.dot(X, np.random.RandomState(0).randn(2, 2))		# Blob 데이터셋이 타원형이 될 수 있게 만듬	
             self.X = X	# 데이터셋 멤버 변수화
             self.number_of_sources = len(np.unique(Y))	# 데이터셋의 클러스터 종류 개수 
 
         elif dataset_type is 'moon':	# Moon 데이터셋 준비
-
             X, Y = make_moons(n_samples=n_samples, noise=0.05, random_state=0)	# Moon 데이터셋 생성
             self.X = X	# 데이터셋 멤버 변수화
             self.number_of_sources = len(np.unique(Y))	# 데이터셋의 클러스터 종류 개수
@@ -60,9 +58,9 @@ class GMM:
         # 정해진 반복횟수만큼 EM 알고리즘을 통해 각 Gaussian Cluster의 중심(Mean)에 최대한 많은 데이터가 모일 수 있도록 중심점(Mean)과 포함 범위(Covariance Matrix)를 변경해나감
         for i in range(self.iterations):
 
-            ######################################################################
+            ###################################################################
             ### E-Step : 데이터셋의 각 데이터가 특정 Cluster에 해당되는 확률을 구함 ###
-            ######################################################################
+            ###################################################################
             r_ic = np.zeros((self.X.shape[0], self.number_of_sources))
             # 데이터셋(self.X.shape[0] : 데이터셋 개수)이 각 Gaussian Cluster(self.number_of_sources : Cluster 개수)에 속할 확률을 리스트로 저장함 
 
@@ -77,10 +75,9 @@ class GMM:
                 # 해당 확률을 전체 Cluster에 대한 소속 확률의 합으로 0 ~ 1사이로 Noramlize함
                 r_ic[:, r] = p * mn.pdf(self.X) / np.sum([pi_c * multivariate_normal(mean=mu_c, cov=cov_c).pdf(self.X) for pi_c, mu_c, cov_c in zip(self.pi, self.mu, self.cov+self.reg_cov)], axis=0)
 
-            #############################################################################################################
-            ### M-Step : 각 데이터의 Cluster별 소속 비율을 반영해서 Gaussian Cluster의 평균(중심점 좌표)를 더 많은 소속 비율을 가진 ###
-            ###          데이터를 향해서 변동이 되도록 평균을 Weighted Mean, Covriance를 Weighted Covariance로 변경함           ###
-            #############################################################################################################
+            ################################################################################################################################################################################################
+            ### M-Step : 각 데이터의 Cluster별 소속 비율을 반영해서 Gaussian Cluster의 평균(중심점 좌표)를 더 많은 소속 비율을 가진 데이터를 향해서 변동이 되도록 평균을 Weighted Mean, Covriance를 Weighted Covariance로 변경함 ###
+            ################################################################################################################################################################################################
             self.mu = []		# 각 Gaussian Cluster별 평균을 새롭게 업데이트하기 위해 준비함
             self.cov = []		# 각 Gaussian Cluster별 Covariance Matrix를 새롭게 업데이트하기 위해 준비함
             self.pi = []		# 각 Gaussian Cluster별 데이터셋에 대한 점유율 업데이트하기 위해 준비함
@@ -108,8 +105,7 @@ class GMM:
 
             ### Singularity : 데이터 1개가 Gaussian Cluster 평균/중심점에 완전 일치하게 되면서 해당 지점을 중심으로 Gaussian Cluster가 Overfitting되는 현상
             ###             : 데이터 1개 중심으로 Gaussian Cluster가 Overfitting되면 해당 지점을 중심으로 Gaussian이 매우 크게 나타나기 때문에 Covariance가 매우 낮게 나타남
-            ###             : 이러한 현상은 Covariance Matrix가 Singular Matrix (Determinant = 0)인 경우 발생하며, 
-            ###               이 때 Gaussian Cluster의 중심점을 랜덤하게 다른 위치로 옮겨서 다르게 Cluster를 구성하게 만듬
+            ###             : 이러한 현상은 Covariance Matrix가 Singular Matrix (Determinant = 0)인 경우 발생하며, 이 때 Gaussian Cluster의 중심점을 랜덤하게 다른 위치로 옮겨서 다르게 Cluster를 구성하게 만듬
 
             singularity = np.zeros(self.number_of_sources)	# 각 Gaussian Cluster별 Singularity 존재여부를 저장하기 위한 리스트
 
@@ -118,7 +114,6 @@ class GMM:
             for co, cluster_idx in zip(self.cov, range(self.number_of_sources)):
                 if abs(np.linalg.det(co)) < 1e-2:	# Determinant의 크기가 0.01 이하인 경우 Singularity라 간주함
                     singularity[cluster_idx] = 1
-
             print('--- Singluarity Check : {} ---'.format(singularity))
 
             # 각 Gaussian Cluster 중 Singularity가 발생하면 평균/중심점으로 다시 랜덤하게 배정하고, Covariance Matrix를 초기화함
@@ -126,15 +121,12 @@ class GMM:
             for singularity_idx in range(len(singularity)):
                 if singularity[singularity_idx] == 1:
                     self.mu[singularity_idx] = np.random.randint(min(self.X[:,0]), max(self.X[:,0]), size=(self.X.shape[1]))	# Gaussian Cluster 중심점을 랜덤하게 재할당
-
                     self.cov[singularity_idx] = np.identity(self.X.shape[1]) + self.reg_cov     # Gaussian Cluster의 Covariance Matrix 재초기화
-                    
                     self.pi[singularity_idx] = 1	# Gaussian Cluster의 점유 비율을 상대적으로 높게 배정 / 기존 Cluster 영역을 침투할 수 있게 허용함
 
             ###############################
             ### Clustering 결과 Plotting ###
             ###############################
-
             # 매 Iteration마다 Gaussian Cluster의 평균/중심점을 기준으로 등고선을 그림
             plt.subplot(1, 2, 1)
             plt.title('EM Algorithm at Iteration {}'.format(i))
@@ -149,13 +141,11 @@ class GMM:
                 multi_normal = multivariate_normal(mean=m,cov=c)
                 plt.contour(np.sort(self.X[:,0]),np.sort(self.X[:,1]),multi_normal.pdf(XY).reshape(len(self.X),len(self.X)),colors='black',alpha=0.3)
                 plt.scatter(m[0],m[1],c='grey',zorder=10,s=100)
-
             # 현재까지 수행한 Iteration에서 산출된 Log-Likelihood를 그래프로 그림
             plt.subplot(1, 2, 2)
             plt.title('Log-Likelihood')
             plt.grid()
             plt.plot(range(len(log_likelihoods)),log_likelihoods)
-
             # 지속적으로 GMM Clustering 결과를 그림
             plt.pause(0.005)
             plt.show(block=False)
