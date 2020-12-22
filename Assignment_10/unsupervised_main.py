@@ -194,7 +194,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best K-Means Model\n[' + dataset['name'] + ' Dataset]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'K-Means')
+    plt.savefig('./Results/unsupervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'K-Means')
 
     classifier_num += 1
     
@@ -232,7 +232,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best GMM Model\n[' + dataset['name'] + ' Dataset]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'GMM')
+    plt.savefig('./Results/unsupervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'GMM')
 
     classifier_num += 1
     
@@ -281,7 +281,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best Agglomerative Clustering Model\n[' + dataset['name'] + ' Dataset]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'Agglomerative_Clustering')
+    plt.savefig('./Results/unsupervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'Agglomerative_Clustering')
 
     classifier_num += 1
     
@@ -350,7 +350,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best DBSCAN Model\n[' + dataset['name'] + ' Dataset]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'DBSCAN')
+    plt.savefig('./Results/unsupervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'DBSCAN')
 
     classifier_num += 1
     
@@ -393,5 +393,4 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver Operating Characteristic - Unsupervised Learning')
 plt.legend(loc="lower right")
-#plt.show()
-plt.savefig('./ROC Curve - Unsupervised Learning' + dataset['name'] + '_' + 'K-Means')
+plt.show()

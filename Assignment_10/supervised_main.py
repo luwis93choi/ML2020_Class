@@ -221,7 +221,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best Logistics Regression Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'LogR')
+    plt.savefig('./Results/supervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'LogR')
 
     classifier_num += 1
     
@@ -252,7 +252,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best KNN Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'KNN')
+    plt.savefig('./Results/supervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'KNN')
 
     classifier_num += 1
 
@@ -283,7 +283,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best Gaussian Naive Bayes Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'GaussianNB')
+    plt.savefig('./Results/supervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'GaussianNB')
 
     classifier_num += 1
 
@@ -314,7 +314,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best Random Forest Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'RandomForest')
+    plt.savefig('./Results/supervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'RandomForest')
 
     classifier_num += 1
 
@@ -345,7 +345,7 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best SVM Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'SVM')
+    plt.savefig('./Results/supervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'SVM')
 
     classifier_num += 1
 
@@ -378,20 +378,19 @@ for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best MLP Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
     #plt.show()
-    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'MLP')
+    plt.savefig('./Results/supervised_learning/Confusion_Matrix_' + dataset['name'] + '_' + 'MLP')
 
     classifier_num += 1
 
 plt.clf()
 plt.cla()
 cmap = plt.cm.rainbow
+i = 0
 for prediction, dataset in zip(predictions, dataset_group):
 
     fpr = [0 for i in range(int(classifier_num))]
     tpr = [0 for i in range(int(classifier_num))]
     roc_auc = [0 for i in range(int(classifier_num))]
-
-    i = 0
 
     fpr[i], tpr[i], _ = roc_curve(prediction['LogR_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
