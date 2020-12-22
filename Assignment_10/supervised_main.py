@@ -13,6 +13,8 @@ import seaborn as sns
 
 from sklearn.preprocessing import StandardScaler
 
+from sklearn.decomposition import PCA
+
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
@@ -48,7 +50,9 @@ breast_cancer_data_std = stdScaler.transform(breast_cancer_data)	# Feature 데�
 
 # 비표준화 데이터셋, 표준화 데이터셋의 통합 관리를 위해 데이터셋 자료구조 생성
 dataset_group = [{'name' : 'Original', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None},
-		         {'name' : 'Standardized', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None}]
+		         {'name' : 'Standardized', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None},
+		         {'name' : 'PCA-Original', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None},
+		         {'name' : 'PCA-Standardized', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None}]
 
 # 비표준화 데이터셋, 표준화 데이터셋을 각각 Training 70%, Test 30%로 분리함
 # 비표준화 데이터셋 Training/Validation 70%, Test 30% 분리
@@ -63,12 +67,20 @@ dataset_group = [{'name' : 'Original', 'X_train' : None, 'y_train' : None, 'X_te
 accuracy = [{'name' : 'Original', 'LinearR_acc' : None, 'LogR_acc' : None, 'KNN_acc' : None, 'GaussianNB_acc' : None, 'RandomForest_acc' : None, 
 	                              'SVM_acc' : None, 'MLP_acc' : None},
 	        {'name' : 'Standardized', 'LinearR_acc' : None, 'LogR_acc' : None, 'KNN_acc' : None, 'GaussianNB_acc' : None, 'RandomForest_acc' : None, 
-	                                  'SVM_acc' : None, 'MLP_acc' : None}]
+	                                  'SVM_acc' : None, 'MLP_acc' : None},
+	        {'name' : 'PCA-Original', 'LinearR_acc' : None, 'LogR_acc' : None, 'KNN_acc' : None, 'GaussianNB_acc' : None, 'RandomForest_acc' : None, 
+	                                  'SVM_acc' : None, 'MLP_acc' : None},
+	        {'name' : 'PCA-Standardized', 'LinearR_acc' : None, 'LogR_acc' : None, 'KNN_acc' : None, 'GaussianNB_acc' : None, 'RandomForest_acc' : None, 
+	                                      'SVM_acc' : None, 'MLP_acc' : None}]
 
 predictions = [{'name' : 'Original', 'LinearR_predict' : None, 'LogR_predict' : None, 'KNN_predict' : None, 'GaussianNB_predict' : None, 'RandomForest_predict' : None, 
 	                                 'SVM_predict' : None, 'MLP_predict' : None},
 	           {'name' : 'Standardized', 'LinearR_predict' : None, 'LogR_predict' : None, 'KNN_predict' : None, 'GaussianNB_predict' : None, 'RandomForest_predict' : None, 
-	                                     'SVM_predict' : None, 'MLP_predict' : None}]
+	                                     'SVM_predict' : None, 'MLP_predict' : None},
+	           {'name' : 'PCA-Original', 'LinearR_acc' : None, 'LogR_acc' : None, 'KNN_acc' : None, 'GaussianNB_acc' : None, 'RandomForest_acc' : None, 
+	                                     'SVM_acc' : None, 'MLP_acc' : None},
+	           {'name' : 'PCA-Standardized', 'LinearR_acc' : None, 'LogR_acc' : None, 'KNN_acc' : None, 'GaussianNB_acc' : None, 'RandomForest_acc' : None, 
+	                                         'SVM_acc' : None, 'MLP_acc' : None}]
 
 #######################################################################################################################################
 ### 02 Dataset Analysis ###############################################################################################################
@@ -135,21 +147,20 @@ plt.show()
 
 
 # 비표준화 데이터셋, 표준화 데이터셋의 통합 관리를 위해 데이터셋 자료구조 생성
-PCA_dataset_group = [{'name' : 'Original', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None},
-		             {'name' : 'Standardized', 'X_train' : None, 'y_train' : None, 'X_test' : None, 'y_test' : None}]
-
 pca_original = PCA(n_components=2, random_state=42).fit(dataset_group[0]['X_train'])
 pca_std = PCA(n_components=5, random_state=42).fit(dataset_group[1]['X_train'])
 
-PCA_dataset_group[0]['X_train'] = pca_original.transform(dataset_group[0]['X_train'])
-PCA_dataset_group[0]['y_train'] = dataset_group[0]['y_train']
-PCA_dataset_group[1]['X_train'] = pca_original.transform(dataset_group[1]['X_train'])
-PCA_dataset_group[1]['y_train'] = dataset_group[1]['y_train']
+dataset_group[2]['X_train'] = pca_original.transform(dataset_group[0]['X_train'])
+dataset_group[2]['y_train'] = dataset_group[0]['y_train']
 
-PCA_dataset_group[0]['X_test'] = pca_original.transform(dataset_group[0]['X_test'])
-PCA_dataset_group[0]['y_test'] = dataset_group[0]['y_test']
-PCA_dataset_group[1]['X_test'] = pca_original.transform(dataset_group[1]['X_test'])
-PCA_dataset_group[1]['y_test'] = dataset_group[1]['y_test']
+dataset_group[2]['X_test'] = pca_original.transform(dataset_group[0]['X_test'])
+dataset_group[2]['y_test'] = dataset_group[0]['y_test']
+
+dataset_group[3]['X_train'] = pca_std.transform(dataset_group[1]['X_train'])
+dataset_group[3]['y_train'] = dataset_group[1]['y_train']
+
+dataset_group[3]['X_test'] = pca_std.transform(dataset_group[1]['X_test'])
+dataset_group[3]['y_test'] = dataset_group[1]['y_test']
 
 PCA_breast_cancer_data = pca_original.transform(breast_cancer_data)
 PCA_breast_cancer_data_std = pca_original.transform(breast_cancer_data_std)
@@ -162,7 +173,7 @@ plt.cla()
 classifier_num = 0
 
 # 비표준화 데이터셋, 표준화 데이터셋 2가지 종류에 걸쳐서 각각의 Classifier를 학습 및 정확도 산출함
-for dataset in dataset_group:
+for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
 
     print('{}'.format(dataset['name']))
 
@@ -180,8 +191,8 @@ for dataset in dataset_group:
 
     print('Test Accuracy : {}'.format(metrics.r2_score(LinearR_model_prediction, dataset['y_test'])))	
 
-    accuracy['name'==dataset['name']]['Linear_acc'] = metrics.r2_score(LinearR_model_prediction, dataset['y_test'])
-    predictions['name'==dataset['name']]['Linear_predict'] = LinearR_model_prediction
+    acc['Linear_acc'] = metrics.r2_score(LinearR_model_prediction, dataset['y_test'])
+    pred['Linear_predict'] = LinearR_model_prediction
 
     ### Logistic Regression 이용한 Classification ###
     print('------ Logistics Regression ------')
@@ -198,9 +209,10 @@ for dataset in dataset_group:
 
     print('Test Accuracy : {}'.format(metrics.accuracy_score(LogR_model_prediction, dataset['y_test'])))	
 
-    accuracy['name'==dataset['name']]['LogR_acc'] = metrics.accuracy_score(LogR_model_prediction, dataset['y_test'])
-    predictions['name'==dataset['name']]['LogR_predict'] = LogR_model_prediction
+    acc['LogR_acc'] = metrics.accuracy_score(LogR_model_prediction, dataset['y_test'])
+    pred['LogR_predict'] = LogR_model_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(dataset['y_test'], LogR_model_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -208,7 +220,8 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best Logistics Regression Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'LogR')
 
     classifier_num += 1
     
@@ -227,9 +240,10 @@ for dataset in dataset_group:
 
     print('Test Accuracy : {}'.format(metrics.accuracy_score(knn_model_prediction, dataset['y_test'])))	
 
-    accuracy['name'==dataset['name']]['KNN_acc'] = metrics.accuracy_score(knn_model_prediction, dataset['y_test'])
-    predictions['name'==dataset['name']]['KNN_predict'] = knn_model_prediction
+    acc['KNN_acc'] = metrics.accuracy_score(knn_model_prediction, dataset['y_test'])
+    pred['KNN_predict'] = knn_model_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(dataset['y_test'], knn_model_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -237,7 +251,8 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best KNN Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'KNN')
 
     classifier_num += 1
 
@@ -256,9 +271,10 @@ for dataset in dataset_group:
 
     print('Test Accuracy : {}'.format(metrics.accuracy_score(GaussiaNB_model_prediction, dataset['y_test'])))	
 
-    accuracy['name'==dataset['name']]['GaussianNB_acc'] = metrics.accuracy_score(GaussiaNB_model_prediction, dataset['y_test'])
-    predictions['name'==dataset['name']]['GaussianNB_predict'] = GaussiaNB_model_prediction
+    acc['GaussianNB_acc'] = metrics.accuracy_score(GaussiaNB_model_prediction, dataset['y_test'])
+    pred['GaussianNB_predict'] = GaussiaNB_model_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(dataset['y_test'], GaussiaNB_model_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -266,7 +282,8 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best Gaussian Naive Bayes Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'GaussianNB')
 
     classifier_num += 1
 
@@ -285,9 +302,10 @@ for dataset in dataset_group:
 
     print('Test Accuracy : {}'.format(metrics.accuracy_score(RandomForest_prediction, dataset['y_test'])))	
 
-    accuracy['name'==dataset['name']]['RandomForest_acc'] = metrics.accuracy_score(RandomForest_prediction, dataset['y_test'])
-    predictions['name'==dataset['name']]['RandomForest_predict'] = RandomForest_prediction
+    acc['RandomForest_acc'] = metrics.accuracy_score(RandomForest_prediction, dataset['y_test'])
+    pred['RandomForest_predict'] = RandomForest_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(dataset['y_test'], RandomForest_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -295,7 +313,8 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best Random Forest Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'RandomForest')
 
     classifier_num += 1
 
@@ -314,9 +333,10 @@ for dataset in dataset_group:
 
     print('Test Accuracy : {}'.format(metrics.accuracy_score(SVM_prediction, dataset['y_test'])))	
 
-    accuracy['name'==dataset['name']]['SVM_acc'] = metrics.accuracy_score(SVM_prediction, dataset['y_test'])
-    predictions['name'==dataset['name']]['SVM_predict'] = SVM_prediction
+    acc['SVM_acc'] = metrics.accuracy_score(SVM_prediction, dataset['y_test'])
+    pred['SVM_predict'] = SVM_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(dataset['y_test'], SVM_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -324,7 +344,8 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best SVM Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'SVM')
 
     classifier_num += 1
 
@@ -345,9 +366,10 @@ for dataset in dataset_group:
 
     print('Test Accuracy : {}'.format(metrics.accuracy_score(MLP_prediction, dataset['y_test'])))	
 
-    accuracy['name'==dataset['name']]['MLP_acc'] = metrics.accuracy_score(MLP_prediction, dataset['y_test'])
-    predictions['name'==dataset['name']]['MLP_predict'] = MLP_prediction
+    acc['MLP_acc'] = metrics.accuracy_score(MLP_prediction, dataset['y_test'])
+    pred['MLP_predict'] = MLP_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(dataset['y_test'], MLP_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -355,12 +377,15 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best MLP Model\n[' + dataset['name'] + ' Dataset + ' + 'Grid Search + Cross Validation]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'MLP')
 
     classifier_num += 1
 
+plt.clf()
+plt.cla()
 cmap = plt.cm.rainbow
-for prediction, dataset in predictions, dataset_group:
+for prediction, dataset in zip(predictions, dataset_group):
 
     fpr = [0 for i in range(int(classifier_num))]
     tpr = [0 for i in range(int(classifier_num))]
@@ -370,32 +395,32 @@ for prediction, dataset in predictions, dataset_group:
 
     fpr[i], tpr[i], _ = roc_curve(prediction['LogR_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='Logistic Regression ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] Logistic Regression ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     fpr[i], tpr[i], _ = roc_curve(prediction['KNN_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='KNN ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] KNN ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     fpr[i], tpr[i], _ = roc_curve(prediction['GaussianNB_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='Gaussian Naive Bayes ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] Gaussian Naive Bayes ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     fpr[i], tpr[i], _ = roc_curve(prediction['RandomForest_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='Random Forest ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] Random Forest ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     fpr[i], tpr[i], _ = roc_curve(prediction['SVM_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='SVM ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] SVM ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     fpr[i], tpr[i], _ = roc_curve(prediction['MLP_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='MLP ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] MLP ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     
@@ -403,6 +428,6 @@ plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('Receiver Operating Characteristic example\n[' + prediction['name'] + ' Dataset]')
+plt.title('Receiver Operating Characteristic - Supervised Learning')
 plt.legend(loc="lower right")
 plt.show()

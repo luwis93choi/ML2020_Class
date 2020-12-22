@@ -156,7 +156,7 @@ PCA_breast_cancer_data_std = pca_original.transform(breast_cancer_data_std)
 ################################################################################################################
 
 classifier_num = 0
-for dataset in dataset_group:
+for dataset, pred, acc in zip(dataset_group, predictions, accuracy):
 
     print('{}'.format(dataset['name']))
 
@@ -182,9 +182,10 @@ for dataset in dataset_group:
 
     print('Kmeans Acc : {}'.format(kmeans_acc))
 
-    accuracy['name'==dataset['name']]['Kmeans_acc'] = kmeans_acc
-    predictions['name'==dataset['name']]['Kmeans_predict'] = kmeans_prediction
+    acc['Kmeans_acc'] = kmeans_acc
+    pred['Kmeans_predict'] = kmeans_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(dataset['y_test'], kmeans_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -192,7 +193,8 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best K-Means Model\n[' + dataset['name'] + ' Dataset]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'K-Means')
 
     classifier_num += 1
     
@@ -218,9 +220,10 @@ for dataset in dataset_group:
 
     print('GMM Acc : {}'.format(GMM_acc))
 
-    accuracy['name'==dataset['name']]['GMM_acc'] = GMM_acc
-    predictions['name'==dataset['name']]['GMM_predict'] = GMM_prediction
+    acc['GMM_acc'] = GMM_acc
+    pred['GMM_predict'] = GMM_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(dataset['y_test'], GMM_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -228,7 +231,8 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best GMM Model\n[' + dataset['name'] + ' Dataset]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'GMM')
 
     classifier_num += 1
     
@@ -265,9 +269,10 @@ for dataset in dataset_group:
 
     print('Agglomerative Clustering Acc : {}'.format(AGG_acc))
 
-    accuracy['name'==dataset['name']]['Agglo_acc'] = AGG_acc
-    predictions['name'==dataset['name']]['Agglo_predict'] = AGG_prediction
+    acc['Agglo_acc'] = AGG_acc
+    pred['Agglo_predict'] = AGG_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(breast_cancer_label, AGG_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -275,7 +280,8 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best Agglomerative Clustering Model\n[' + dataset['name'] + ' Dataset]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'Agglomerative_Clustering')
 
     classifier_num += 1
     
@@ -332,9 +338,10 @@ for dataset in dataset_group:
     print('DBSCAN Clustering Acc : {}'.format(best_dbscan_acc))
     print('Best DBSCAN Params : eps = {} | minPts = {}'.format(best_EPS, best_minPts))
 
-    accuracy['name'==dataset['name']]['DBSCAN_acc'] = best_dbscan_acc
-    predictions['name'==dataset['name']]['DBSCAN_predict'] = dbscan_prediction
+    acc['DBSCAN_acc'] = best_dbscan_acc
+    pred['DBSCAN_predict'] = dbscan_prediction
 
+    plt.clf()
     confusion_Mat = confusion_matrix(breast_cancer_label, dbscan_prediction)
     group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
     group_percentages = ["{0:.2%}".format(value) for value in confusion_Mat.flatten()/np.sum(confusion_Mat)]
@@ -342,16 +349,15 @@ for dataset in dataset_group:
     labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(confusion_Mat/np.sum(confusion_Mat), annot=labels, fmt='', cmap='Blues')
     plt.title('Confusion Matrix of Best DBSCAN Model\n[' + dataset['name'] + ' Dataset]')
-    plt.show()
+    #plt.show()
+    plt.savefig('./Confusion_Matrix_' + dataset['name'] + '_' + 'DBSCAN')
 
     classifier_num += 1
     
     print('\n')
 
-    print(predictions['name'==dataset['name']])
-
-print(predictions)
-
+plt.clf()
+plt.cla()
 cmap = plt.cm.rainbow
 i = 0
 for prediction, dataset in zip(predictions, dataset_group):
@@ -362,22 +368,22 @@ for prediction, dataset in zip(predictions, dataset_group):
     
     fpr[i], tpr[i], _ = roc_curve(prediction['Kmeans_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='K-Means ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] K-Means ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     fpr[i], tpr[i], _ = roc_curve(prediction['GMM_predict'], dataset['y_test'])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='GMM ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] GMM ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     fpr[i], tpr[i], _ = roc_curve(prediction['Agglo_predict'], breast_cancer_label)
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='Agglomerative Clustering ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] Agglomerative Clustering ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     fpr[i], tpr[i], _ = roc_curve(prediction['DBSCAN_predict'], breast_cancer_label)
     roc_auc[i] = auc(fpr[i], tpr[i])
-    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='DBSCAN ROC curve (area = %0.2f)' % roc_auc[i])
+    plt.plot(fpr[i], tpr[i], lw=2, c=cmap(i/classifier_num), label='[' + prediction['name'] + '] DBSCAN ROC curve (area = %0.2f)' % roc_auc[i])
     i += 1
 
     
@@ -385,6 +391,7 @@ plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('Receiver Operating Characteristic example\n[' + prediction['name'] + ' Dataset]')
+plt.title('Receiver Operating Characteristic - Unsupervised Learning')
 plt.legend(loc="lower right")
-plt.show()
+#plt.show()
+plt.savefig('./ROC Curve - Unsupervised Learning' + dataset['name'] + '_' + 'K-Means')
