@@ -1,0 +1,31 @@
+Original
+Kmeans Acc : 0.8654970760233918
+GMM Acc : 0.9473684210526315
+Agglomerative Clustering Acc : 0.7785588752196837
+DBSCAN Clustering Acc : 0.9015817223198594
+Best DBSCAN Params : eps = 100 | minPts = 50
+
+
+Standardized
+Kmeans Acc : 0.9122807017543859
+GMM Acc : 0.9473684210526315
+Agglomerative Clustering Acc : 0.8804920913884007
+DBSCAN Clustering Acc : 0.6291739894551845
+Best DBSCAN Params : eps = 10 | minPts = 50
+
+
+PCA-Original
+Kmeans Acc : 0.8654970760233918
+GMM Acc : 0.9590643274853801
+Agglomerative Clustering Acc : 0.875219683655536
+DBSCAN Clustering Acc : 0.9015817223198594
+Best DBSCAN Params : eps = 100 | minPts = 50
+
+
+PCA-Standardized
+Kmeans Acc : 0.9122807017543859
+GMM Acc : 0.8654970760233918
+Agglomerative Clustering Acc : 0.836555360281195
+DBSCAN Clustering Acc : 0.9226713532513181
+Best DBSCAN Params : eps = 0.1 | minPts = 14
+

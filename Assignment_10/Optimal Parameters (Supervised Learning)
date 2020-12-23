@@ -1,0 +1,120 @@
+Original
+------ Linear Regression ------
+Best Training Accuracy : 0.7170036421394196
+Test Accuracy : 0.7064034222170537
+------ Logistics Regression ------
+Optimal Params : {}
+Best Training Accuracy : 0.9473417721518986
+Test Accuracy : 0.935672514619883
+------ KNN ------
+Optimal Params : {'n_neighbors': 9}
+Best Training Accuracy : 0.942373417721519
+Test Accuracy : 0.9415204678362573
+------ Gaussian Naive Bayes ------
+Optimal Params : {}
+Best Training Accuracy : 0.9296835443037974
+Test Accuracy : 0.9649122807017544
+------ Random Forest ------
+Optimal Params : {'n_estimators': 59}
+Best Training Accuracy : 0.9599050632911392
+Test Accuracy : 0.9824561403508771
+------ SVM ------
+Optimal Params : {'C': 0.1, 'gamma': 0.001, 'kernel': 'linear'}
+Best Training Accuracy : 0.9548101265822785
+Test Accuracy : 0.9532163742690059
+------ MLP ------
+Optimal Params : {'hidden_layer_sizes': [100, 100], 'random_state': 23, 'solver': 'adam'}
+Best Training Accuracy : 0.9348417721518987
+Test Accuracy : 0.935672514619883
+
+
+Standardized
+------ Linear Regression ------
+Best Training Accuracy : 0.7170036421394542
+Test Accuracy : 0.7064034222170525
+------ Logistics Regression ------
+Optimal Params : {}
+Best Training Accuracy : 0.9824367088607595
+Test Accuracy : 0.9766081871345029
+------ KNN ------
+Optimal Params : {'n_neighbors': 9}
+Best Training Accuracy : 0.9574050632911393
+Test Accuracy : 0.9707602339181286
+------ Gaussian Naive Bayes ------
+Optimal Params : {}
+Best Training Accuracy : 0.9347151898734175
+Test Accuracy : 0.9532163742690059
+------ Random Forest ------
+Optimal Params : {'n_estimators': 74}
+Best Training Accuracy : 0.9648734177215189
+Test Accuracy : 0.9707602339181286
+------ SVM ------
+Optimal Params : {'C': 0.1, 'gamma': 0.001, 'kernel': 'linear'}
+Best Training Accuracy : 0.9774367088607596
+Test Accuracy : 0.9766081871345029
+------ MLP ------
+Optimal Params : {'hidden_layer_sizes': [1, 100], 'random_state': 23, 'solver': 'adam'}
+Best Training Accuracy : 0.9723734177215189
+Test Accuracy : 0.9766081871345029
+
+
+PCA-Original
+------ Linear Regression ------
+Best Training Accuracy : 0.5104575910678267
+Test Accuracy : 0.3215540038539796
+------ Logistics Regression ------
+Optimal Params : {}
+Best Training Accuracy : 0.9297784810126581
+Test Accuracy : 0.9298245614035088
+------ KNN ------
+Optimal Params : {'n_neighbors': 8}
+Best Training Accuracy : 0.942373417721519
+Test Accuracy : 0.9415204678362573
+------ Gaussian Naive Bayes ------
+Optimal Params : {}
+Best Training Accuracy : 0.8946835443037976
+Test Accuracy : 0.9298245614035088
+------ Random Forest ------
+Optimal Params : {'n_estimators': 53}
+Best Training Accuracy : 0.9397468354430378
+Test Accuracy : 0.9122807017543859
+------ SVM ------
+Optimal Params : {'C': 0.01, 'gamma': 0.001, 'kernel': 'linear'}
+Best Training Accuracy : 0.9273101265822785
+Test Accuracy : 0.9298245614035088
+------ MLP ------
+Optimal Params : {'hidden_layer_sizes': [10, 100], 'random_state': 23, 'solver': 'sgd'}
+Best Training Accuracy : 0.9398417721518987
+Test Accuracy : 0.935672514619883
+
+
+PCA-Standardized
+------ Linear Regression ------
+Best Training Accuracy : 0.7051825588398456
+Test Accuracy : 0.6030558818110068
+------ Logistics Regression ------
+Optimal Params : {}
+Best Training Accuracy : 0.9699367088607594
+Test Accuracy : 0.9707602339181286
+------ KNN ------
+Optimal Params : {'n_neighbors': 14}
+Best Training Accuracy : 0.954873417721519
+Test Accuracy : 0.9649122807017544
+------ Gaussian Naive Bayes ------
+Optimal Params : {}
+Best Training Accuracy : 0.9271518987341771
+Test Accuracy : 0.9298245614035088
+------ Random Forest ------
+Optimal Params : {'n_estimators': 33}
+Best Training Accuracy : 0.9498101265822785
+Test Accuracy : 0.9766081871345029
+------ SVM ------
+Optimal Params : {'C': 1.0, 'gamma': 0.01, 'kernel': 'rbf'}
+Best Training Accuracy : 0.967373417721519
+Test Accuracy : 0.9766081871345029
+------ MLP ------
+Optimal Params : {'hidden_layer_sizes': [1, 100], 'random_state': 23, 'solver': 'lbfgs'}
+Best Training Accuracy : 0.9674050632911392
+Test Accuracy : 0.9766081871345029
+
+
